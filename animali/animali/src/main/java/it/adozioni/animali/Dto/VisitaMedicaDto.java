@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class VisitaMedicaDto {
+
     private String nome;
 
     private LocalDateTime data;

@@ -1,6 +1,8 @@
 package it.adozioni.animali.Mapper;
 
+import it.adozioni.animali.Dto.CentroAdozioneDto;
 import it.adozioni.animali.Dto.VisitaMedicaDto;
+import it.adozioni.animali.Model.CentroAdozione;
 import it.adozioni.animali.Model.VisitaMedica;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
@@ -20,3 +22,4 @@ public class VisitaMedicaMapper extends AbstractConverter<VisitaMedica, VisitaMe
         return mapper.map(dto, VisitaMedica.class);
     }
 }
+
