@@ -1,5 +1,6 @@
 package it.adozioni.animali.model;
 
+import it.adozioni.animali.Model.VisitaMedica;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
