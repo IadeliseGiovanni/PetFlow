@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f469a122-de5c-439a-9e80-b11c2bc8c01d" name="Changes" comment="Add Adottante Model" />
+    <list default="true" id="f469a122-de5c-439a-9e80-b11c2bc8c01d" name="Changes" comment="Changes&#10;Animale.java" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -25,6 +25,7 @@
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {
@@ -34,8 +35,8 @@
 }</component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/IadeliseGiovanni/animali&quot;,
-    &quot;accountId&quot;: &quot;460f7e00-6033-4a5f-902e-3914b276c371&quot;
+    &quot;url&quot;: &quot;https://github.com/IadeliseGiovanni/animali.git&quot;,
+    &quot;accountId&quot;: &quot;e1508615-1b5f-4115-8e3c-4298526875d3&quot;
   }
 }</component>
   <component name="MavenImportPreferences">
@@ -57,25 +58,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "develop",
-    "ignore.virus.scanning.warn.message": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/user/Desktop/animali",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Maven.animali [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.animali [install].executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;develop&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/user/Desktop/animali&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="AnimaliApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="animali" />
@@ -85,14 +87,7 @@
       </method>
     </configuration>
   </component>
-  <component name="SharedIndexes">
-    <attachedChunks>
-      <set>
-        <option value="bundled-jdk-30f59d01ecdd-2fc7cc6b9a17-intellij.indexing.shared.core-IU-253.32098.37" />
-        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-IU-253.32098.37" />
-      </set>
-    </attachedChunks>
-  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="f469a122-de5c-439a-9e80-b11c2bc8c01d" name="Changes" comment="" />
@@ -102,7 +97,7 @@
       <updated>1774860043911</updated>
       <workItem from="1774860045164" duration="4760000" />
       <workItem from="1774866354180" duration="502000" />
-      <workItem from="1774866895171" duration="1867000" />
+      <workItem from="1774866895171" duration="303000" />
     </task>
     <task id="LOCAL-00001" summary="modify">
       <option name="closed" value="true" />
@@ -120,21 +115,21 @@
       <option name="project" value="LOCAL" />
       <updated>1774867168844</updated>
     </task>
-    <task id="LOCAL-00003" summary="Changes&#10;workspace.xml">
+    <task id="LOCAL-00003" summary="Changes&#10;Animale.java&#10;misc.xml&#10;workspace.xml&#10;Unversioned Files">
       <option name="closed" value="true" />
-      <created>1774867507139</created>
+      <created>1774873651528</created>
       <option name="number" value="00003" />
       <option name="presentableId" value="LOCAL-00003" />
       <option name="project" value="LOCAL" />
-      <updated>1774867507139</updated>
+      <updated>1774873651528</updated>
     </task>
-    <task id="LOCAL-00004" summary="Add Adottante Model">
+    <task id="LOCAL-00004" summary="Changes&#10;Animale.java">
       <option name="closed" value="true" />
-      <created>1774873572212</created>
+      <created>1774873907659</created>
       <option name="number" value="00004" />
       <option name="presentableId" value="LOCAL-00004" />
       <option name="project" value="LOCAL" />
-      <updated>1774873572213</updated>
+      <updated>1774873907659</updated>
     </task>
     <option name="localTasksCounter" value="5" />
     <servers />
@@ -153,7 +148,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="develop" />
+                        <option value="GiovanniIadelise-CentroAdozione" />
                       </list>
                     </value>
                   </entry>
@@ -168,8 +163,9 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="modify" />
     <MESSAGE value="Changes&#10;application.properties&#10;CentroAdozione.java&#10;CentroAdozioneRepository.java&#10;workspace.xml" />
-    <MESSAGE value="Changes&#10;workspace.xml" />
-    <MESSAGE value="Add Adottante Model" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add Adottante Model" />
+    <MESSAGE value="Changes&#10;Animale.java&#10;misc.xml&#10;workspace.xml&#10;Unversioned Files" />
+    <MESSAGE value="Changes&#10;Changes&#10;Merge Conflicts&#10;misc.xml&#10;workspace.xml" />
+    <MESSAGE value="Changes&#10;Animale.java" />
+    <option name="LAST_COMMIT_MESSAGE" value="Changes&#10;Animale.java" />
   </component>
 </project>
