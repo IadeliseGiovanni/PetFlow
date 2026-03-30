@@ -9,7 +9,9 @@ public class CentroAdozioneMapper extends AbstractConverter<CentroAdozione, Cent
 
     @Override
     public CentroAdozioneDto toDto(CentroAdozione entity) {
-        if (entity == null) return null;
+        if (entity == null) {
+            return null;
+        }
         CentroAdozioneDto dto = new CentroAdozioneDto();
         dto.setNomeCentro(entity.getNomeCentro());
         dto.setIndirizzo(entity.getIndirizzo());
@@ -21,7 +23,9 @@ public class CentroAdozioneMapper extends AbstractConverter<CentroAdozione, Cent
 
     @Override
     public CentroAdozione toEntity(CentroAdozioneDto dto) {
-        if (dto == null) return null;
+        if (dto == null) {
+            return null;
+        }
         CentroAdozione entity = new CentroAdozione();
         entity.setNomeCentro(dto.getNomeCentro());
         entity.setIndirizzo(dto.getIndirizzo());
