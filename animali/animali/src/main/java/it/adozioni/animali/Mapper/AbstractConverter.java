@@ -1,12 +1,7 @@
 package it.adozioni.animali.Mapper;
 
-
-
-import it.adozioni.animali.Mapper.Converter;
-
 import java.util.ArrayList;
 import java.util.List;
-
 
 
 public abstract class AbstractConverter<Entity,DTO> implements Converter<Entity,DTO> {

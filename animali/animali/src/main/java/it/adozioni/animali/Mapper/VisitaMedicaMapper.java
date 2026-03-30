@@ -6,7 +6,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 @Component
-public class VisitaMedicaMapper extends ModelMapper<VisitaMedica, VisitaMedicaDto> {
+public class VisitaMedicaMapper extends AbstractConverter<VisitaMedica, VisitaMedicaDto> {
 
     final private ModelMapper mapper = new ModelMapper();
 
