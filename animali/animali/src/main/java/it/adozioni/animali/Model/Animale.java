@@ -1,0 +1,27 @@
+package it.adozioni.animali.model;
+
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.List;
+
+@Entity
+@Getter
+@Setter
+@Table(name="Animale",schema="public")
+public class Animale {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String nome;
+    private String specie;
+    private String razza;
+    private int eta;
+    private String genere;
+    boolean isAdottato;
+
+
+    @OneToMany(mappedBy = "Animale")
+    List<VisitaMedica> visiteMediche;
+}
