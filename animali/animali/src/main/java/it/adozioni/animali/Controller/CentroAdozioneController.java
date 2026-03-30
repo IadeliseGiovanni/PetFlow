@@ -19,6 +19,6 @@ public class CentroAdozioneController {
     // Endpoint per ottenere la lista di tutti i centri (restituisce i DTO)
     @GetMapping("/lista")
     public List<CentroAdozioneDto> getAllCentri() {
-        return centroService.listaTuttiICentri();
+        return (List<CentroAdozioneDto>) centroService.listaTuttiICentri();
     }
 }

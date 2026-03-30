@@ -11,6 +11,9 @@ import lombok.Setter;
 @NoArgsConstructor
 public class CentroAdozioneDto {
 
+    // 🔹 AGGIUNGI QUESTA RIGA QUI SOTTO
+    private Long id;
+
     private String nomeCentro;
 
     private String indirizzo;
@@ -20,6 +23,4 @@ public class CentroAdozioneDto {
     private Integer capacitaMassima;
 
     private Boolean isNoProfit;
-
-
 }
