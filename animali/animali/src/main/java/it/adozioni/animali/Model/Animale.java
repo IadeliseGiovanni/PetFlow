@@ -29,4 +29,13 @@ public class Animale {
     //relazione 1-n con VisitaMedica
     @OneToMany(mappedBy = "animale")
     List<VisitaMedica> visiteMediche;
+    @ManyToOne
+    @JoinColumn(name="adottante_id", nullable = true)
+    private Adottante adottante;
+    @ManyToOne
+    @JoinColumn(name = "centroAdozione_id")
+    private CentroAdozione centroAdozione;
+
+
+
 }
