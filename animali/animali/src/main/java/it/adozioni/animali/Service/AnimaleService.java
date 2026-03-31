@@ -9,7 +9,10 @@ import it.adozioni.animali.Model.Animale;
 import it.adozioni.animali.Repository.AdottanteRepository;
 import it.adozioni.animali.Repository.AnimaleRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class AnimaleService extends AbstractService<Animale, AnimaleDto>{
@@ -57,5 +60,33 @@ public class AnimaleService extends AbstractService<Animale, AnimaleDto>{
                 animale.getNome(), animale.getMicrochip(),
                 adottante.getNome(), adottante.getCognome()
         );
+    }
+    List<AnimaleDto> findByNome(String nome){
+        return animaleMapper.toDTOList(animaleRepository.findByNome(nome));
+    }
+    List<AnimaleDto>findByRazza(String razza){
+        return animaleMapper.toDTOList(animaleRepository.findByRazza(razza));
+    }
+    List<AnimaleDto>findByGenere(String genere){
+        return animaleMapper.toDTOList(animaleRepository.findByGenere(genere));
+    }
+    List<AnimaleDto>findBySpecie(String specie){
+        return animaleMapper.toDTOList(animaleRepository.findBySpecie(specie));
+    }
+    List<AnimaleDto>findByRazzaAndSpecie(String razza, String specie){
+        return animaleMapper.toDTOList(animaleRepository.findByRazzaAndSpecie(razza,specie));
+    }
+    List<AnimaleDto> findDisponibiliPerCentro( Integer centroId){
+        return animaleMapper.toDTOList(animaleRepository.findDisponibiliPerCentro(centroId));
+    }
+    List<AnimaleDto> findLastFiveAdded(){
+        return animaleMapper.toDTOList(animaleRepository.findLastFiveAdded());
+    }
+    public long countPerSpecieEIdCentro(String specie, Integer centroId) {
+        return animaleRepository.countPerSpecieEIdCentro(specie, centroId);
+    }
+    public List<AnimaleDto> findAnimaliConMolteVisite(int minVisite) {
+        // Esattamente come gli altri: chiamo il repo e passo il risultato al mapper
+        return animaleMapper.toDTOList(animaleRepository.findAnimaliConMolteVisite(minVisite));
     }
 }
