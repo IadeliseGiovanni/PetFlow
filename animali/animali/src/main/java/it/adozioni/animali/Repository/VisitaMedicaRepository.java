@@ -2,11 +2,13 @@ package it.adozioni.animali.Repository;
 
 import it.adozioni.animali.Model.VisitaMedica;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-public interface VisitaMedicaRepository extends JpaRepository<VisitaMedica, Long> {
+@Repository
+public interface VisitaMedicaRepository extends JpaRepository<VisitaMedica, Integer> {
 
     List<VisitaMedica> findByData(LocalDateTime data);
 
