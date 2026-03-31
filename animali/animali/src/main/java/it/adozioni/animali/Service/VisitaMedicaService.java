@@ -6,6 +6,7 @@ import it.adozioni.animali.Mapper.Converter;
 import it.adozioni.animali.Mapper.VisitaMedicaMapper;
 import it.adozioni.animali.Model.VisitaMedica;
 import it.adozioni.animali.Repository.VisitaMedicaRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
@@ -15,14 +16,18 @@ import java.util.List;
 @Service
 public class VisitaMedicaService extends AbstractService<VisitaMedica, VisitaMedicaDto> {
 
+    @Autowired
     private final VisitaMedicaRepository visitaMedicaRepository;
 
+    @Autowired
     private final VisitaMedicaMapper visitaMedicaMapper;
 
-    protected VisitaMedicaService(JpaRepository<VisitaMedica, Integer> repository, Converter<VisitaMedica, VisitaMedicaDto> converter, VisitaMedicaMapper visitaMedicaMapper, VisitaMedicaRepository visitaMedicaRepository) {
+    protected VisitaMedicaService(VisitaMedicaRepository repository,
+                               Converter<VisitaMedica, VisitaMedicaDto> converter,
+                               VisitaMedicaMapper mapper) {
         super(repository, converter);
-        this.visitaMedicaMapper = visitaMedicaMapper;
-        this.visitaMedicaRepository = visitaMedicaRepository;
+        this.visitaMedicaRepository = repository;
+        this.visitaMedicaMapper = mapper;
     }
 
     public List<VisitaMedicaDto> findByData(LocalDateTime data) {
