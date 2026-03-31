@@ -12,13 +12,14 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/animali")
-public class AnimaleController  extends AbstractController <AnimaleDto>  {
+public class AnimaleController extends AbstractController<AnimaleDto> {
 
     @Autowired
     private AnimaleService animaleService;
@@ -43,27 +44,30 @@ public class AnimaleController  extends AbstractController <AnimaleDto>  {
 
     // 3. IL CUORE DEL PROGETTO: Generazione del Contratto PDF
     @PostMapping("/genera-contratto")
+    @Transactional
     public ResponseEntity<byte[]> generaContratto(@RequestBody AdozioneRequestDto adozioneDto) {
 
-        // 1. Uso i dati dentro il DTO per cercare le Entity nel DB
-        // Nota: Assicurati di avere questi metodi 'findByIdEntity' nei tuoi Service
+        // 1. Recupero le Entity reali dal DB.
+        // Grazie alla modifica nel Service, se l'ID non esiste, qui avremo un valore null.
         Animale animale = animaleService.findByIdEntity(adozioneDto.getIdAnimale());
         Adottante adottante = adottanteService.findByIdEntity(adozioneDto.getIdAdottante());
 
-        // Controllo di sicurezza: se uno dei due non esiste, ritorno 404
+        // 2. Controllo di sicurezza: ora se l'ID è sbagliato (es. mandi 1 invece di 9),
+        // riceverai un errore 404 su Postman invece di un PDF con "null".
         if (animale == null || adottante == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        // 2. Chiamo il service che "disegna" il PDF (il byte[] è il file fisico)
+        // 3. Generazione fisica del PDF tramite byte array
         byte[] pdf = documentoService.creaPdf(animale, adottante);
 
-        // 3. Rispondo inviando il file PDF con gli Header corretti
+        // 4. Configurazione degli Header per il download
         HttpHeaders headers = new HttpHeaders();
-        // Dico al client che il contenuto è un PDF
         headers.setContentType(MediaType.APPLICATION_PDF);
-        // Dico al browser di scaricarlo come allegato chiamato 'contratto.pdf'
-        headers.setContentDispositionFormData("attachment", "contratto_adozione_" + animale.getNome() + ".pdf");
+
+        // Costruisco il nome del file in modo dinamico
+        String nomeAnimale = (animale.getNome() != null) ? animale.getNome() : "animale";
+        headers.setContentDispositionFormData("attachment", "contratto_adozione_" + nomeAnimale + ".pdf");
 
         return new ResponseEntity<>(pdf, headers, HttpStatus.OK);
     }

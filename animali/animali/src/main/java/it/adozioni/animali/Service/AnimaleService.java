@@ -17,10 +17,10 @@ import java.util.List;
 @Service
 public class AnimaleService extends AbstractService<Animale, AnimaleDto> {
 
-    final private AnimaleMapper animaleMapper;
-    final private AnimaleRepository animaleRepository;
-    final private AdottanteRepository adottanteRepository;
-    final private AdottanteMapper adottanteMapper;
+    private final AnimaleMapper animaleMapper;
+    private final AnimaleRepository animaleRepository;
+    private final AdottanteRepository adottanteRepository;
+    private final AdottanteMapper adottanteMapper;
 
     public AnimaleService(JpaRepository<Animale, Integer> repository,
                           Converter<Animale, AnimaleDto> converter,
@@ -38,12 +38,15 @@ public class AnimaleService extends AbstractService<Animale, AnimaleDto> {
 
     @Transactional
     public String generaContrattoAdozione(Integer animaleId, Integer adottanteId) {
+        // Recupero le entità reali. Se non esistono, il metodo lancia un'eccezione
+        // e ferma l'esecuzione, evitando dati 'null' nel contratto.
         Animale animale = animaleRepository.findById(animaleId)
-                .orElseThrow(() -> new RuntimeException("Animale non trovato"));
+                .orElseThrow(() -> new RuntimeException("Animale con ID " + animaleId + " non trovato"));
 
         Adottante adottante = adottanteRepository.findById(adottanteId)
-                .orElseThrow(() -> new RuntimeException("Adottante non trovato"));
+                .orElseThrow(() -> new RuntimeException("Adottante con ID " + adottanteId + " non trovato"));
 
+        // Logica di business: aggiorno lo stato dell'animale
         animale.setAdottato(true);
         animale.setAdottante(adottante);
         animaleRepository.save(animale);
@@ -51,7 +54,7 @@ public class AnimaleService extends AbstractService<Animale, AnimaleDto> {
         return String.format(
                 "CERTIFICATO DI ADOZIONE\n" +
                         "--------------------------\n" +
-                        "Il sottoscritto %s %s, residente a %s,\n" + // Aggiunto segnaposto per residenza
+                        "Il sottoscritto %s %s, residente a %s,\n" +
                         "si impegna a prendersi cura dell'animale descritto di seguito.\n" +
                         "Testo Plain: L'animale dovrà essere trattato con cura e rispetto.\n\n" +
                         "DATI ANIMALE:\n" +
@@ -59,10 +62,17 @@ public class AnimaleService extends AbstractService<Animale, AnimaleDto> {
                         "Microchip: %s\n\n" +
                         "Firma dell'adottante: ________________\n" +
                         "(Firmato digitalmente da %s %s)",
-                adottante.getNome(), adottante.getCognome(), "Indirizzo Non Specificato", // Sostituisci con campo reale
+                adottante.getNome(), adottante.getCognome(), "Indirizzo da definire",
                 animale.getNome(), animale.getMicrochip(),
                 adottante.getNome(), adottante.getCognome()
         );
+    }
+
+    // Metodo fondamentale per il Controller
+    public Animale findByIdEntity(Integer id) {
+        // IMPORTANTE: .orElse(null) permette al Controller di ricevere un vero null
+        // e rispondere con un errore 404 invece di generare un PDF vuoto.
+        return animaleRepository.findById(id).orElse(null);
     }
 
     public List<AnimaleDto> findByNome(String nome) {
@@ -103,9 +113,5 @@ public class AnimaleService extends AbstractService<Animale, AnimaleDto> {
 
     public List<AnimaleDto> findAll() {
         return animaleMapper.toDTOList(animaleRepository.findAll());
-    }
-
-    public Animale findByIdEntity(Integer id) {
-        return animaleRepository.findById(id).orElse(new Animale());
     }
 }
