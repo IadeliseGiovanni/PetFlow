@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface AnimaleRepository extends JpaRepository<AnimaleRepository,Long> {
+public interface AnimaleRepository extends JpaRepository<AnimaleRepository,Integer> {
     Animale findByNome(String nome);
     List<Animale>findByRazza(String razza);
     List<Animale>findByGenere(String genere);

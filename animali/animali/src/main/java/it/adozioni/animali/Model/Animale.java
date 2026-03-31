@@ -18,7 +18,7 @@ import java.util.List;
 public class Animale {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
     private String nome;
     private String specie;
     private String razza;
