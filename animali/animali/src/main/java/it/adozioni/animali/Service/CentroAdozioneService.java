@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class CentroAdozioneService extends AbstractService<CentroAdozione, CentroAdozioneDto> {
@@ -23,40 +22,29 @@ public class CentroAdozioneService extends AbstractService<CentroAdozione, Centr
         this.mapper = mapper;
     }
 
-    // Restituisce DTO (per il Controller)
+    // 1. JPA AUTO - Cerca per città (Restituisce Lista DTO)
     public List<CentroAdozioneDto> findByCitta(String citta) {
-        return repository.findByCitta(citta).stream()
-                .map(entity -> (CentroAdozioneDto) mapper.toDTO(entity)) // Cast aggiunto qui
-                .collect(Collectors.toList());
+        return mapper.toDTOList(repository.findByCitta(citta));
     }
 
-    // Restituisce DTO (per il Controller)
+    // 2. JPA AUTO - Cerca per NoProfit (Restituisce Lista DTO)
     public List<CentroAdozioneDto> findByIsNoProfit(boolean noProfit) {
-        return repository.findByIsNoProfit(noProfit).stream()
-                .map(entity -> (CentroAdozioneDto) mapper.toDTO(entity)) // Cast aggiunto qui
-                .collect(Collectors.toList());
+        return mapper.toDTOList(repository.findByIsNoProfit(noProfit));
     }
 
-    // Restituisce un singolo DTO
+    // 3. JPA AUTO - Cerca per Nome Centro (Restituisce Singolo DTO)
     public CentroAdozioneDto findByNomeCentro(String nome) {
-        // Se la repository restituisce una List, prendiamo il primo elemento col cast
-        List<CentroAdozione> entities = repository.findByNomeCentro(nome);
-        if (entities == null || entities.isEmpty()) {
-            return null;
-        }
-        return (CentroAdozioneDto) mapper.toDTO(entities.get(0)); // Cast aggiunto qui
+        CentroAdozione centro = (CentroAdozione) repository.findByNomeCentro(nome);
+        if (centro == null) return null;
+        return mapper.toDTO(centro);
     }
 
-    // Metodi che restituiscono Entity (utili per i Service o i Test interni)
-    public List<CentroAdozione> findAll() {
-        return repository.findAll();
+    // 4. Metodo per ottenere tutti i centri mappati in DTO
+    public List<CentroAdozioneDto> listaTuttiICentri() {
+        return mapper.toDTOList(repository.findAll());
     }
 
-    public CentroAdozione findById(Integer id) {
-        return repository.findById(id).orElse(null);
-    }
-
-    public Iterable<CentroAdozioneDto> listaTuttiICentri() {
-        return getAll();
-    }
+    // Nota: i metodi findAll() e findById(id) che restituiscono Entity
+    // sono già ereditati da AbstractService, quindi non serve riscriverli
+    // a meno che tu non voglia personalizzarli.
 }
