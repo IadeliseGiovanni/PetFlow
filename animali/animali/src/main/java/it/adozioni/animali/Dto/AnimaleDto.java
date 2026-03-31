@@ -26,5 +26,4 @@ public class AnimaleDto {
     private CentroAdozione centroAdozione;
     private String microchip;
 
-
 }
