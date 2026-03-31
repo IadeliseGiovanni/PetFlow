@@ -25,6 +25,7 @@ public class Animale {
     private int eta;
     private String genere;
     boolean isAdottato;
+    private String microchip ;
 
     //relazione 1-n con VisitaMedica
     @OneToMany(mappedBy = "animale")

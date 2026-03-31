@@ -24,6 +24,7 @@ public class AnimaleDto {
     private List<VisitaMedica> visiteMediche;
     private Adottante adottante;
     private CentroAdozione centroAdozione;
+    private String microchip;
 
 
 }
