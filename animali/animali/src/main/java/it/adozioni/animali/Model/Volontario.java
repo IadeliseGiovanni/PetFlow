@@ -22,4 +22,8 @@ public class Volontario {
     private String cognome;
     private String cf;      // codice fiscale
     private String turno;   // turno assegnato
+
+    @ManyToOne
+    @JoinColumn(name = "centro_id", nullable = true)
+    private CentroAdozione centroAdozione;
 }
