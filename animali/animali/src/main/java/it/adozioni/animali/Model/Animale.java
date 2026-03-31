@@ -37,6 +37,4 @@ public class Animale {
     @JoinColumn(name = "centri_adozione_id")
     private CentroAdozione centroAdozione;
 
-
-
 }
