@@ -22,8 +22,4 @@ public class AdottanteMapper extends AbstractConverter<Adottante, AdottanteDto> 
         return mapper.map(dto, Adottante.class);
     }
 
-    @Override
-    public CentroAdozioneDto toDto(CentroAdozione entity) {
-        return null;
-    }
 }
