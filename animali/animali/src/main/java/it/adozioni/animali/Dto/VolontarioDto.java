@@ -1,5 +1,6 @@
 package it.adozioni.animali.Dto;
 
+import it.adozioni.animali.Model.CentroAdozione;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,4 +17,6 @@ public class VolontarioDto {
     private String cognome;
     private String cf;
     private String turno;
+
+    private CentroAdozione centroAdozione;
 }
