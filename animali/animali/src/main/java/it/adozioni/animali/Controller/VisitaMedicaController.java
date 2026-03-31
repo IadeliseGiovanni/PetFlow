@@ -3,6 +3,7 @@ package it.adozioni.animali.Controller;
 import it.adozioni.animali.Dto.VisitaMedicaDto;
 import it.adozioni.animali.Service.VisitaMedicaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -12,6 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("VisitaMedica")
 @CrossOrigin(origins = "http://localhost:4200")
+@PreAuthorize("hasRole('VETERINARIO')")
 public class VisitaMedicaController extends AbstractController<VisitaMedicaDto> {
 
     @Autowired
