@@ -24,16 +24,35 @@ public class AdottanteService extends AbstractService<Adottante, AdottanteDto> i
 
     private final AdottanteRepository adottanteRepository;
     private final AdottanteMapper adottanteMapper;
+    private final org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
 
     @Autowired //add
     protected AdottanteService(JpaRepository<Adottante, Integer> repository,
                                Converter<Adottante, AdottanteDto> converter,
                                AdottanteMapper adottanteMapper,
-                               AdottanteRepository adottanteRepository) {
+                               AdottanteRepository adottanteRepository, org.springframework.security.crypto.password.PasswordEncoder passwordEncoder) {
 
         super(repository, converter);
         this.adottanteRepository = adottanteRepository;
         this.adottanteMapper = adottanteMapper;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    // Metodo per la registrazione
+    public AdottanteDto registra(AdottanteDto dto) {
+        // Trasformi il DTO in Entity
+        Adottante entity = adottanteMapper.toEntity(dto);
+
+        // Prendi la password dal DTO (assicurati che AdottanteDto abbia getPassword())
+        String passwordInChiaro = dto.getPassword();
+
+        // La cripti usando il bean passwordEncoder
+        String passwordCriptata = passwordEncoder.encode(passwordInChiaro);
+
+        // La salvi nell'entity (assicurati che Adottante abbia setPassword())
+        entity.setPassword(passwordCriptata);
+
+        return adottanteMapper.toDTO(adottanteRepository.save(entity));
     }
 
     @Override

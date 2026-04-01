@@ -21,5 +21,6 @@ public class AdottanteDto {
     private String telefono;
     private Boolean isSchedato;
     private List<Animale> animaliAdottati;
+    private String password;
 
 }
