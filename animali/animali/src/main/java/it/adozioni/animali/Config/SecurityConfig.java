@@ -3,7 +3,6 @@ package it.adozioni.animali.Config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -11,6 +10,11 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -19,7 +23,6 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthFilter;
 
-    // Costruttore per iniettare il filtro JWT
     public SecurityConfig(JwtAuthenticationFilter jwtAuthFilter) {
         this.jwtAuthFilter = jwtAuthFilter;
     }
@@ -27,32 +30,43 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                // 1. Disabilita CSRF (necessario per API REST che usano POST/PUT)
+                // 1. CORS: Fondamentale se poi collegherai un Front-end (Angular/React)
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+
+                // 2. Disabilita CSRF: Obbligatorio per API Stateless
                 .csrf(csrf -> csrf.disable())
 
-                // 2. Gestione sessione STATELESS: non salviamo dati su server, usiamo solo Token
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-
-                // 3. Permessi delle rotte
+                // 3. Configura le regole di autorizzazione
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll()    // Login e Register sempre aperti
-                        .requestMatchers("/api/animali/**").permitAll() // Lista animali aperta (per test)
-                        .anyRequest().authenticated()                   // Tutto il resto protetto
+                        // Permette l'accesso pubblico esplicito a queste rotte
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/animali/**").permitAll()
+                        // Opzionale: permette l'accesso alla console H2 se la usi
+                        .requestMatchers("/h2-console/**").permitAll()
+                        // Qualsiasi altra richiesta deve essere autenticata
+                        .anyRequest().authenticated()
                 )
 
-                // 4. Inseriamo il nostro filtro JWT prima di quello standard
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                // 4. Gestione della sessione: Non salvare nulla sul server
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
-                // 5. Abilitiamo Basic Auth (per test rapidi su Postman con user/pass)
-                .httpBasic(Customizer.withDefaults());
+                // 5. Inserisce il filtro JWT prima di quello standard
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 
-    /**
-     * NOTA: Il PasswordEncoder è stato spostato in PasswordConfig.java
-     * per evitare riferimenti circolari.
-     */
+    // Configurazione CORS per evitare blocchi dai browser
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(List.of("*")); // In produzione metti l'URL del frontend
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
