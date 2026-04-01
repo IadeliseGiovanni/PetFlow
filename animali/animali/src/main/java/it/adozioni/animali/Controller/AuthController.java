@@ -5,6 +5,7 @@ import it.adozioni.animali.Dto.LoginRequest;
 import it.adozioni.animali.Service.AdottanteService;
 import it.adozioni.animali.Service.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@Profile("!dev")
 @RequestMapping("/api/auth")
 public class AuthController {
 

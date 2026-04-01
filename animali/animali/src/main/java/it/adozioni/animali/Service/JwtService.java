@@ -3,12 +3,14 @@ package it.adozioni.animali.Service;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
 @Service
+@Profile("!dev")
 public class JwtService {
     @Value("${jwt.secret}")
     private String SECRET_KEY;
