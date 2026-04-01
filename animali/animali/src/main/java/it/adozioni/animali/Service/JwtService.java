@@ -2,6 +2,7 @@ package it.adozioni.animali.Service;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -9,7 +10,8 @@ import java.util.Date;
 
 @Service
 public class JwtService {
-    private static final String SECRET_KEY = "la_tua_chiave_segreta_molto_lunga_e_sicura_qui";
+    @Value("${jwt.secret}")
+    private String SECRET_KEY;
 
     public String generateToken(UserDetails userDetails) {
         return Jwts.builder()

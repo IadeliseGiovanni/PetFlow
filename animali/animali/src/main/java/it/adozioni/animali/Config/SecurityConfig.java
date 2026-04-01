@@ -2,6 +2,7 @@ package it.adozioni.animali.Config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -17,6 +18,7 @@ import it.adozioni.animali.Config.JwtAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
+@Profile("!dev")
 @EnableMethodSecurity // Abilita l'uso di @PreAuthorize sui controller
 public class SecurityConfig {
 
