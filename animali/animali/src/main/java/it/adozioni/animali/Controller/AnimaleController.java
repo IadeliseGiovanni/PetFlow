@@ -21,61 +21,46 @@ public class AnimaleController {
 
     @Autowired
     private AnimaleService animaleService;
-
     @Autowired
     private AdottanteService adottanteService;
-
     @Autowired
     private DocumentoService documentoService;
-
     @Autowired
     private EmailService emailService;
 
     @PostMapping("/genera-contratto")
     public ResponseEntity<?> generaContratto(@RequestBody AdozioneRequestDto adozioneDto) {
 
-        System.out.println("--- INIZIO PROCESSO CONTRATTUALE ---");
-
-        // 1. Recupero entità dal DB
+        // 1. Recupero entità
         Animale animale = animaleService.findByIdEntity(adozioneDto.getIdAnimale());
         Adottante adottante = adottanteService.findByIdEntity(adozioneDto.getIdAdottante());
 
-        // 2. Validazione esistenza
         if (animale == null || adottante == null) {
-            System.err.println("ERRORE: ID non trovati nel database.");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Errore: Animale o Adottante non esistente.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Errore: Dati non trovati.");
         }
 
         try {
-            // 3. Creazione del PDF
-            System.out.println("LOG: Generazione PDF per " + animale.getNome() + "...");
+            // 2. Generazione del PDF Professionale (Verde Salvia)
             byte[] pdf = documentoService.creaPdf(animale, adottante);
 
-            // 4. INVIO EMAIL (PROTETTO DA TRY-CATCH LOCALE)
-            // Questo blocco evita che l'errore di autenticazione email blocchi il PDF
-            try {
-                if (adottante.getEmail() != null && !adottante.getEmail().isEmpty()) {
-                    System.out.println("LOG: Tentativo invio email a " + adottante.getEmail());
-                    emailService.inviaContrattoConAllegato(adottante.getEmail(), animale.getNome(), pdf);
-                }
-            } catch (Exception mailException) {
-                // Se la mail fallisce, logghiamo l'errore ma procediamo con la restituzione del PDF
-                System.err.println("AVVISO: Invio email fallito (Authentication Error), ma procedo con il download.");
-            }
+            // 3. INVIO EMAIL ALL'ADOTTANTE (Con il PDF allegato)
+            emailService.inviaContrattoConAllegato(adottante.getEmail(), animale.getNome(), pdf);
 
-            // 5. Configurazione Header per il download del file
+            // 4. INVIO EMAIL DI RICEZIONE/CONGRATULAZIONI AL CENTRO
+            // Notifica lo staff che la procedura digitale è andata a buon fine
+            emailService.inviaNotificaRicezioneAlCentro(adottante.getEmail(), animale.getNome());
+
+            // 5. RITORNO DEL PDF PER IL DOWNLOAD SU POSTMAN/BROWSER
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_PDF);
-            String fileName = "Contratto_Adozione_" + animale.getNome() + ".pdf";
+            String fileName = "Contratto_" + animale.getNome() + ".pdf";
             headers.setContentDispositionFormData("attachment", fileName);
 
-            System.out.println("--- SUCCESSO: Contratto inviato alla risposta HTTP ---");
             return new ResponseEntity<>(pdf, headers, HttpStatus.OK);
 
         } catch (Exception e) {
-            System.err.println("ERRORE CRITICO SISTEMA: " + e.getMessage());
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Errore tecnico nella generazione del contratto.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Errore nel processo di adozione.");
         }
     }
 }
