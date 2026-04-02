@@ -4,12 +4,15 @@ import it.adozioni.animali.Mapper.VolontarioMapper;
 import it.adozioni.animali.Model.Volontario;
 import it.adozioni.animali.Dto.VolontarioDto;
 import it.adozioni.animali.Repository.VolontarioRepository;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class VolontarioService extends AbstractService<Volontario, VolontarioDto> {
+public class VolontarioService extends AbstractService<Volontario, VolontarioDto> implements UserDetailsService {
 
     private final VolontarioRepository volontarioRepository;
 
@@ -18,6 +21,12 @@ public class VolontarioService extends AbstractService<Volontario, VolontarioDto
 
         super(volontarioRepository, volontarioMapper);
         this.volontarioRepository = volontarioRepository;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        return volontarioRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("Utente non trovato con email: " + email));
     }
 
     // 🔹 1 - Cerca per nome

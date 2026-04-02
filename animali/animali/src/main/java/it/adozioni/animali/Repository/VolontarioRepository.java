@@ -1,11 +1,13 @@
 package it.adozioni.animali.Repository;
 
+import it.adozioni.animali.Model.Adottante;
 import it.adozioni.animali.Model.Volontario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface VolontarioRepository extends JpaRepository<Volontario, Integer> {
@@ -43,4 +45,6 @@ public interface VolontarioRepository extends JpaRepository<Volontario, Integer>
 
     // 🔹 10 - Contiene (LIKE)
     List<Volontario> findByNomeContaining(String keyword);
+
+    Optional<Volontario> findByEmail(String email);
 }

@@ -17,6 +17,7 @@ public class VolontarioDto {
     private String cognome;
     private String cf;
     private String turno;
+    private String password;
 
     private CentroAdozione centroAdozione;
 }
