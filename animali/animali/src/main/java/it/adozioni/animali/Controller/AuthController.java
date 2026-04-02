@@ -2,8 +2,10 @@ package it.adozioni.animali.Controller;
 
 import it.adozioni.animali.Dto.AdottanteDto;
 import it.adozioni.animali.Dto.LoginRequest;
+import it.adozioni.animali.Dto.VolontarioDto;
 import it.adozioni.animali.Service.AdottanteService;
 import it.adozioni.animali.Service.JwtService;
+import it.adozioni.animali.Service.VolontarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,12 +26,15 @@ public class AuthController {
     private AdottanteService adottanteService;
 
     @Autowired
+    private VolontarioService volontarioService;
+
+    @Autowired
     private JwtService jwtService;
 
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    @PostMapping("/register")
+    @PostMapping("/register/adottante")
     public ResponseEntity<?> register(@RequestBody AdottanteDto dto) {
         try {
             System.out.println("DEBUG: Tentativo di registrazione per " + dto.getEmail());
@@ -38,6 +43,18 @@ public class AuthController {
         } catch (Exception e) {
             System.err.println("DEBUG ERROR: Errore registrazione: " + e.getMessage());
             return ResponseEntity.badRequest().body("Errore: Email già esistente o dati non validi.");
+        }
+    }
+
+    @PostMapping("/register/volontario")
+    public ResponseEntity<?> registerVolontario(@RequestBody VolontarioDto dto) {
+        try {
+            System.out.println("DEBUG: Registrazione Volontario per " + dto.getEmail());
+            // Usa il metodo registra che abbiamo appena sistemato nel VolontarioService
+            VolontarioDto nuovoVolontario = volontarioService.registra(dto);
+            return new ResponseEntity<>(nuovoVolontario, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Errore registrazione volontario: " + e.getMessage());
         }
     }
 

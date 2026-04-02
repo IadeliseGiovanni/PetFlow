@@ -13,6 +13,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -30,6 +31,7 @@ public class AnimaleController {
     private EmailService emailService;
 
     @PostMapping("/genera-contratto")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> generaContratto(@RequestBody AdozioneRequestDto adozioneDto) {
 
         // --- VALIDAZIONE INPUT (Evita l'errore 400 generico) ---
