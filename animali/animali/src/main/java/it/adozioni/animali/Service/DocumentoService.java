@@ -18,21 +18,22 @@ public class DocumentoService {
 
     public byte[] creaPdf(Animale animale, Adottante adottante) {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
+        // Definizione del documento con margini speculari per un aspetto editoriale
         Document document = new Document(PageSize.A4, 60, 60, 50, 50);
 
         try {
             PdfWriter writer = PdfWriter.getInstance(document, out);
             document.open();
 
-            // --- 1. SFONDO NATURALE PROFESSIONALE ---
+            // --- 1. BACKGROUND (Sage Green) ---
             PdfContentByte canvas = writer.getDirectContentUnder();
             canvas.saveState();
-            canvas.setColorFill(new Color(220, 228, 201)); // Sage Green
+            canvas.setColorFill(new Color(220, 228, 201));
             canvas.rectangle(0, 0, PageSize.A4.getWidth(), PageSize.A4.getHeight());
             canvas.fill();
             canvas.restoreState();
 
-            // --- 2. PALETTE E FONT ---
+            // --- 2. PALETTE COLORI E STILI FONT ---
             Color forestGreen = new Color(30, 81, 40);
             Color darkEarth = new Color(62, 39, 35);
 
@@ -42,13 +43,13 @@ public class DocumentoService {
             Font fontText = FontFactory.getFont(FontFactory.HELVETICA, 10, Color.BLACK);
             Font fontSmall = FontFactory.getFont(FontFactory.HELVETICA, 8, Color.DARK_GRAY);
 
-            // --- 3. HEADER ISTITUZIONALE ---
+            // --- 3. HEADER ---
             Paragraph header = new Paragraph("SISTEMA NAZIONALE GESTIONE RIFUGI\nProtocollo Adozioni Interno", fontSub);
             header.setAlignment(Element.ALIGN_RIGHT);
             document.add(header);
             document.add(new Paragraph("\n"));
 
-            // --- 4. TITOLO ---
+            // --- 4. TITOLO E DATA ---
             Paragraph titolo = new Paragraph("CERTIFICATO DI ADOZIONE DEFINITIVA", fontTitle);
             titolo.setAlignment(Element.ALIGN_CENTER);
             titolo.setSpacingAfter(5);
@@ -60,31 +61,41 @@ public class DocumentoService {
             document.add(data);
             document.add(new Paragraph("\n\n"));
 
-            // --- 5. SEZIONE I: DICHIARAZIONE DELL'ADOTTANTE ---
+            // --- 5. ART. 1: DATI ADOTTANTE ---
             document.add(new Paragraph("ART. 1 - DATI DELL'AFFIDATARIO", fontSection));
             document.add(new Paragraph("Il sottoscritto " + adottante.getNome().toUpperCase() + " " + adottante.getCognome().toUpperCase() +
                     ", registrato con email " + adottante.getEmail() + ", dichiara sotto la propria responsabilità di accogliere l'animale descritto all'Art. 2, " +
                     "assumendone la custodia legale e l'onere del mantenimento.", fontText));
             document.add(new Paragraph("\n"));
 
-            // --- 6. SEZIONE II: DESCRIZIONE SOGGETTO ---
+            // --- 6. ART. 2: IDENTIFICAZIONE ANIMALE (LOGICA DINAMICA) ---
             document.add(new Paragraph("ART. 2 - IDENTIFICAZIONE ANIMALE", fontSection));
             document.add(new Paragraph("___________________________________________________________", FontFactory.getFont(FontFactory.HELVETICA, 8, Color.WHITE)));
 
             Paragraph infoAnimale = new Paragraph();
             infoAnimale.setFont(fontText);
+
+            // Nome e Specie
             infoAnimale.add(new Chunk("NOME: ", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10, forestGreen)));
             infoAnimale.add(animale.getNome().toUpperCase() + " | ");
             infoAnimale.add(new Chunk("SPECIE: ", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10, forestGreen)));
             infoAnimale.add(animale.getSpecie() + "\n");
+
+            // Razza
             infoAnimale.add(new Chunk("RAZZA: ", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10, forestGreen)));
             infoAnimale.add((animale.getRazza() != null ? animale.getRazza() : "Incrocio") + " | ");
+
+            // LOGICA MICROCHIP: Se nullo nel DB, genera un codice di protocollo
             infoAnimale.add(new Chunk("MICROCHIP: ", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10, forestGreen)));
-            infoAnimale.add((animale.getMicrochip() != null ? animale.getMicrochip() : "In fase di registrazione"));
+            String mc = (animale.getMicrochip() != null && !animale.getMicrochip().isEmpty())
+                    ? animale.getMicrochip()
+                    : "REG-2026-" + animale.getId() + "ITA";
+            infoAnimale.add(mc);
+
             document.add(infoAnimale);
             document.add(new Paragraph("\n"));
 
-            // --- 7. SEZIONE III: OBBLIGHI E RESPONSABILITÀ (IL CONTENUTO PROFESSIONALE) ---
+            // --- 7. ART. 3: VINCOLI LEGALI ---
             document.add(new Paragraph("ART. 3 - VINCOLI CONTRATTUALI", fontSection));
             Paragraph clausole = new Paragraph();
             clausole.setFont(fontSmall);
@@ -97,10 +108,23 @@ public class DocumentoService {
 
             document.add(new Paragraph("\n\n\n\n"));
 
-            // --- 8. FIRME ---
-            Paragraph firme = new Paragraph("IL RESPONSABILE DEL CENTRO               L'ADOTTANTE DICHIARANTE\n\n", fontSub);
-            firme.add(new Chunk("____________________________              ____________________________", fontSub));
+            // --- 8. FIRME PERSONALIZZATE ---
+            Paragraph firme = new Paragraph();
             firme.setAlignment(Element.ALIGN_CENTER);
+
+            // Colonna Responsabile (Tu)
+            Chunk chunkResp = new Chunk("IL RESPONSABILE DEL CENTRO\n", fontSub);
+            firme.add(chunkResp);
+            firme.add(new Chunk("Giovanni Iadelise\n", fontSmall));
+            firme.add(new Chunk("____________________________", fontSub));
+
+            firme.add(new Chunk("              ")); // Spazio centrale
+
+            // Colonna Adottante
+            firme.add(new Chunk("L'ADOTTANTE DICHIARANTE\n", fontSub));
+            firme.add(new Chunk(adottante.getNome() + " " + adottante.getCognome() + "\n", fontSmall));
+            firme.add(new Chunk("____________________________", fontSub));
+
             document.add(firme);
 
             // --- 9. FOOTER ---
