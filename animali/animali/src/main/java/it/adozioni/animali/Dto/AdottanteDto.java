@@ -1,5 +1,6 @@
 package it.adozioni.animali.Dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import it.adozioni.animali.Model.Animale;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,6 +22,7 @@ public class AdottanteDto {
     private String telefono;
     private Boolean isSchedato;
     private List<Animale> animaliAdottati;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
 }

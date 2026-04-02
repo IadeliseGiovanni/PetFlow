@@ -1,5 +1,6 @@
 package it.adozioni.animali.Dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import it.adozioni.animali.Model.CentroAdozione;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,6 +18,7 @@ public class VolontarioDto {
     private String cognome;
     private String cf;
     private String turno;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     private CentroAdozione centroAdozione;
