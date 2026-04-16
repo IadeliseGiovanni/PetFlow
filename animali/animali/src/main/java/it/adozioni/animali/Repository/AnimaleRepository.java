@@ -32,4 +32,6 @@ public interface AnimaleRepository extends JpaRepository<Animale,Integer> {
             "GROUP BY a.id HAVING COUNT(v.id) >= :minVisite", nativeQuery = true)
     List<Animale> findAnimaliConMolteVisite(@Param("minVisite") int minVisite);
 
+    List<Animale> findBySpecieAndGenere(String specie, String genere);
+
 }
