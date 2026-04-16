@@ -27,4 +27,6 @@ public class AnimaleDto {
     private Adottante adottante;
     private CentroAdozione centroAdozione;
     private String microchip;
+
+    private String descrizione;
 }

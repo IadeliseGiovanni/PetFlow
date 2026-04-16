@@ -35,4 +35,7 @@ public class CentroAdozione {
 
     @OneToMany(mappedBy = "centroAdozione", cascade = CascadeType.ALL)
     private List<Volontario> volontari;
+
+    private Double latitudine;
+    private Double longitudine;
 }

@@ -34,4 +34,17 @@ public interface AnimaleRepository extends JpaRepository<Animale,Integer> {
 
     List<Animale> findBySpecieAndGenere(String specie, String genere);
 
+    List<Animale> findByCentroAdozioneId(Long centroId);
+
+    List<Animale> findBySpecieAndGenereAndCentroAdozioneId(String specie, String genere, Long centroId);
+    List<Animale> findBySpecieAndCentroAdozioneId(String specie, Long centroId);
+    List<Animale> findByGenereAndCentroAdozioneId(String genere, Long centroId);
+
+    @Query("SELECT a FROM Animale a WHERE " +
+            "(:specie IS NULL OR a.specie = :specie) AND " +
+            "(:genere IS NULL OR a.genere = :genere) AND " +
+            "(:centroId IS NULL OR a.centroAdozione.id = :centroId)")
+    List<Animale> findFiltered(@Param("specie") String specie,
+                               @Param("genere") String genere,
+                               @Param("centroId") Long centroId);
 }

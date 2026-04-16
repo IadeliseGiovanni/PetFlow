@@ -27,6 +27,9 @@ public class Animale {
     private int eta;
     private String genere;
 
+    @Column(columnDefinition = "TEXT")
+    private String descrizione;
+
     // Nome allineato al DB: 'adottato'
     private boolean adottato;
 

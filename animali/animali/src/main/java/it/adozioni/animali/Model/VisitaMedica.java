@@ -28,6 +28,8 @@ public class VisitaMedica {
 
     private String veterinario;
 
+    private String note;
+
     @ManyToOne
     @JoinColumn(name = "animale_id", nullable = true)
     @JsonIgnore

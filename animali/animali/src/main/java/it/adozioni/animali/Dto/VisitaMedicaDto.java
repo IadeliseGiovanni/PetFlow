@@ -23,4 +23,6 @@ public class VisitaMedicaDto {
     private String veterinario;
 
     private Animale animale;
+
+    private String note;
 }

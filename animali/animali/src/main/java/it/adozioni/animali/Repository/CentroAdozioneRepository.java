@@ -44,4 +44,6 @@ public interface CentroAdozioneRepository extends JpaRepository<CentroAdozione, 
 
     // 10 - Contiene (LIKE): cerca centri che hanno una parola nel nome
     List<CentroAdozione> findByNomeCentroContaining(String keyword);
+
+
 }

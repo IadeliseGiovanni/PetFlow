@@ -30,4 +30,7 @@ public class CentroAdozioneDto {
     private List<Animale> animaliOspitati;
 
     private List<Volontario> volontari;
+
+    private Double latitudine;
+    private Double longitudine;
 }

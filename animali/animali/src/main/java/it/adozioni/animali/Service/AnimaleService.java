@@ -7,7 +7,6 @@ import it.adozioni.animali.Repository.AnimaleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class AnimaleService extends AbstractService<Animale, AnimaleDto> {
@@ -50,20 +49,16 @@ public class AnimaleService extends AbstractService<Animale, AnimaleDto> {
         return animaleMapper.toDTOList(animaleRepository.findAll());
     }
 
-    public List<AnimaleDto> filterAnimali(String specie, String genere) {
-        List<Animale> lista;
+    public List<AnimaleDto> filterAnimali(String specie, String genere, Long centroId) {
+        // Puliamo le stringhe vuote che arrivano da Angular (se presenti)
+        String s = (specie != null && !specie.isEmpty()) ? specie : null;
+        String g = (genere != null && !genere.isEmpty()) ? genere : null;
 
-        if (specie != null && genere != null) {
-            lista = animaleRepository.findBySpecieAndGenere(specie, genere);
-        } else if (specie != null) {
-            lista = animaleRepository.findBySpecie(specie);
-        } else if (genere != null) {
-            lista = animaleRepository.findByGenere(genere);
-        } else {
-            lista = animaleRepository.findAll();
-        }
-
-        // Converti la lista di Entity in DTO (come già fai per gli altri metodi)
+        List<Animale> lista = animaleRepository.findFiltered(s, g, centroId);
         return animaleMapper.toDTOList(lista);
+    }
+
+    public List<AnimaleDto> getAnimaliByCentro(Long centroId) {
+        return animaleMapper.toDTOList(animaleRepository.findByCentroAdozioneId(centroId));
     }
 }

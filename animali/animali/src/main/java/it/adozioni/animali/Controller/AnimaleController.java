@@ -87,7 +87,16 @@ public class AnimaleController {
     @GetMapping("/search")
     public List<AnimaleDto> searchAnimali(
             @RequestParam(required = false) String specie,
-            @RequestParam(required = false) String genere) {
-        return animaleService.filterAnimali(specie, genere);
+            @RequestParam(required = false) String genere,
+            @RequestParam(required = false) Long centroId){
+        System.out.println("DEBUG FILTRI -> Specie: " + specie + ", Genere: " + genere + ", CentroID: " + centroId);
+        return animaleService.filterAnimali(specie, genere, centroId);
+    }
+
+    @GetMapping("/centro/{idCentro}")
+    public ResponseEntity<List<AnimaleDto>> getByCentro(@PathVariable Long idCentro) {
+        // Chiama il repository per trovare gli animali con quel centro_id
+        List<AnimaleDto> animali = animaleService.getAnimaliByCentro(idCentro);
+        return ResponseEntity.ok(animali);
     }
 }
