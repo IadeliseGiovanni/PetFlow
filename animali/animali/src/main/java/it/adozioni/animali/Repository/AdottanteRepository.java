@@ -14,4 +14,7 @@ public interface AdottanteRepository extends JpaRepository<Adottante, Integer> {
     Optional<Adottante> findByEmail(String email);
 
     List<Adottante> findByCognome(String cognome);
+
+    Optional<Adottante> findByVerificationToken(String token);
+    boolean existsByEmail(String email);
 }

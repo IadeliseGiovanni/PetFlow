@@ -34,7 +34,10 @@ public class Adottante implements UserDetails { //implementando dice usa questa 
     @Column(nullable = false)
     private String password;
 
-    private String ruolo; // Esempio nel DB: "USER"
+    private String ruolo = "USER";
+
+    private boolean enabled = false;
+    private String verificationToken;
 
     @OneToMany(mappedBy = "adottante")
     private List<Animale> animaliAdottati;

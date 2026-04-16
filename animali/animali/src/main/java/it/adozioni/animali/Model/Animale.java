@@ -1,5 +1,7 @@
 package it.adozioni.animali.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -35,9 +37,11 @@ public class Animale {
 
     @ManyToOne
     @JoinColumn(name="adottante_id", nullable = true) // Permette ID nullo
+    @JsonIgnore
     private Adottante adottante;
 
     @ManyToOne
     @JoinColumn(name = "centri_adozione_id", nullable = true) // Fondamentale: cambiato in TRUE
+    @JsonIgnore
     private CentroAdozione centroAdozione;
 }

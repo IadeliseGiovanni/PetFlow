@@ -1,5 +1,6 @@
 package it.adozioni.animali.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -34,6 +35,7 @@ public class Volontario implements UserDetails {
 
     @ManyToOne
     @JoinColumn(name = "centro_id", nullable = true)
+    @JsonIgnore
     private CentroAdozione centroAdozione;
 
 

@@ -1,30 +1,31 @@
 package it.adozioni.animali.Controller;
 
+import it.adozioni.animali.Dto.VisitaMedicaDto;
 import it.adozioni.animali.Dto.VolontarioDto;
 import it.adozioni.animali.Service.VolontarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("Volontario")
+@RequestMapping("/api/Volontario")
 @CrossOrigin(origins = "http://localhost:4200")
 public class VolontarioController extends AbstractController<VolontarioDto> {
 
     @Autowired
     private VolontarioService service;
 
+    @GetMapping("/all")
+    public ResponseEntity<List<VolontarioDto>> getAll() {
+        return ResponseEntity.ok(service.findAll());
+    }
+
     // 🔹 1 - INSERT
     @PostMapping("/insert")
     public VolontarioDto insert(@RequestBody VolontarioDto dto) {
         return service.insert(dto);
-    }
-
-    // 🔹 2 - GET ALL
-    @GetMapping("/getAll")
-    public Iterable<VolontarioDto> getAll() {
-        return service.getAll();
     }
 
     // 🔹 3 - GET BY ID

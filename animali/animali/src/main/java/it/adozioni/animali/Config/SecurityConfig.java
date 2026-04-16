@@ -1,7 +1,11 @@
 package it.adozioni.animali.Config;
 
+import it.adozioni.animali.Config.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -25,20 +29,54 @@ public class SecurityConfig {
     }
 
     @Bean
+    @Profile("test")
+    public SecurityFilterChain securityFilterChainTest(HttpSecurity http) throws Exception {
+        http
+                .cors(cors -> {}) // <--- AGGIUNTO: Abilita il supporto CORS
+                .csrf(csrf -> csrf.disable())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth -> auth
+                        .anyRequest().permitAll()
+                );
+        return http.build();
+    }
+
+    @Bean
     @Profile("!test")
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.configure(http)) // Abilita comunicazione con Angular
+                .cors(cors -> cors.configure(http)) // Assicurati che i CORS siano attivi
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll() // Login e Register liberi
-                        .requestMatchers("/error").permitAll()       // Gestione errori libera
-                        .anyRequest().authenticated()                // Tutto il resto protetto
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/animali/**").permitAll()
+                        .requestMatchers("/VisitaMedica/**").permitAll() // Copriamo l'URL senza /api
+                        .requestMatchers("/api/VisitaMedica/**").permitAll() // E quello con /api
+                        .requestMatchers("/api/animali/**").permitAll()   // Aggiunto
+                        .requestMatchers("/api/Volontario/**").permitAll() // Aggiunto
+                        .requestMatchers("/api/centri/**").permitAll()
+                        .requestMatchers("/api/Adottante/**").permitAll()
+                        .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
+    }
+
+    // Questo bean definisce LE REGOLE dei CORS
+    @Bean
+    public CorsFilter corsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+
+        config.setAllowCredentials(true);
+        config.addAllowedOrigin("http://localhost:4200"); // Origine del tuo frontend Angular
+        config.addAllowedHeader("*"); // Permette Header come Authorization, Content-Type, ecc.
+        config.addAllowedMethod("*"); // Permette tutti i metodi (GET, POST, OPTIONS, ecc.)
+
+        source.registerCorsConfiguration("/**", config);
+        return new CorsFilter(source);
     }
 }

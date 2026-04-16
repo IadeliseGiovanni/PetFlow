@@ -1,20 +1,19 @@
 package it.adozioni.animali.Controller;
 
+import it.adozioni.animali.Dto.VisitaMedicaDto;
 import it.adozioni.animali.Service.ServiceDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 public abstract class AbstractController <DTO>{
 
     @Autowired
     private ServiceDTO<DTO> service;
-
-    @GetMapping("/getall")
-    public Iterable<DTO> getAll(){
-        return service.getAll();
-    }
 
     @DeleteMapping("/delete")
     public void delete(@RequestParam("id") Integer id) {
