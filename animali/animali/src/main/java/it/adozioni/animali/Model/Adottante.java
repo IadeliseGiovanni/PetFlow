@@ -69,5 +69,5 @@ public class Adottante implements UserDetails { //implementando dice usa questa 
     public boolean isCredentialsNonExpired() { return true; }
 
     @Override
-    public boolean isEnabled() { return true; }
+    public boolean isEnabled() { return this.enabled; }
 }

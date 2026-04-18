@@ -9,9 +9,8 @@ import it.adozioni.animali.Service.VolontarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.*;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
@@ -62,42 +61,38 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
         try {
-            System.out.println("--- DEBUG LOGIN START ---");
-            System.out.println("Email ricevuta: " + request.getEmail());
-
-            // 1. Carichiamo l'utente PRIMA dell'autenticazione per controllare lo stato della verifica
-            UserDetails user = adottanteService.loadUserByUsername(request.getEmail());
-
-            // --- CONTROLLO VERIFICA EMAIL ---
-            // Se l'utente esiste ma non ha cliccato sul link, blocchiamo l'accesso
-            if (!user.isEnabled()) {
-                System.err.println("DEBUG ERROR: Utente non abilitato (email non verificata): " + request.getEmail());
-                return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                        .body("Errore: Devi confermare la tua email prima di accedere a PetFlow.");
-            }
-//
-            // 2. L'AuthenticationManager controlla la password
-            authenticationManager.authenticate(
+            // 1. L'AuthenticationManager fa tutto il lavoro sporco:
+            // Controlla se l'utente esiste, se la password è corretta E se è abilitato (isEnabled)
+            Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
             );
 
-            System.out.println("DEBUG: Autenticazione riuscita per " + request.getEmail());
+            // 2. Recuperiamo l'utente autenticato
+            UserDetails user = (UserDetails) authentication.getPrincipal();
 
             // 3. Generiamo il Token
             String token = jwtService.generateToken(user);
 
-            // Restituiamo un JSON pulito con il token
             Map<String, String> response = new HashMap<>();
             response.put("token", token);
 
-            System.out.println("DEBUG: Token inviato a Postman!");
+            // OPZIONALE: Se vuoi mandare anche il nome al frontend direttamente
+            // response.put("nome", ((Adottante)user).getNome());
+
             return ResponseEntity.ok(response);
 
+        } catch (DisabledException e) {
+            // Questo scatta se isEnabled() nel tuo modello Adottante ritorna false
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body("Errore: Conferma la tua email per attivare l'account.");
+        } catch (LockedException e) {
+            // Questo scatta se isAccountNonLocked() ritorna false (utente schedato)
+            return ResponseEntity.status(HttpStatus.LOCKED)
+                    .body("Errore: Il tuo account è stato sospeso.");
         } catch (BadCredentialsException e) {
-            System.err.println("DEBUG ERROR: Password sbagliata!");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Errore: Credenziali non valide.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("Errore: Email o password errati.");
         } catch (Exception e) {
-            System.err.println("DEBUG ERROR: Errore imprevisto: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Errore server.");
         }
     }

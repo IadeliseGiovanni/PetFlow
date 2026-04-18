@@ -7,6 +7,7 @@ import it.adozioni.animali.Model.Adottante;
 import it.adozioni.animali.Repository.AdottanteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -16,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+
+import static org.hibernate.cfg.JdbcSettings.USER;
 
 @Service
 public class AdottanteService extends AbstractService<Adottante, AdottanteDto> implements UserDetailsService {
@@ -45,8 +48,11 @@ public class AdottanteService extends AbstractService<Adottante, AdottanteDto> i
      */
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return adottanteRepository.findByEmail(email)
+        // 1. Cerchiamo l'utente nel DB
+        Adottante utente = adottanteRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Utente non trovato con email: " + email));
+
+        return utente;
     }
 //
     /**
