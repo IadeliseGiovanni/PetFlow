@@ -89,4 +89,59 @@ public class EmailService {
 
         mailSender.send(message);
     }
+
+    public void inviaNuovaPassword(String destinatario, String nuovaPassword) {
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, false);
+
+            helper.setFrom(emailSorgente);
+            helper.setTo(destinatario);
+            helper.setSubject("🔑 Reset Password - PetFlow");
+
+            StringBuilder testo = new StringBuilder();
+            testo.append("Ciao,\n\n");
+            testo.append("Abbiamo ricevuto una richiesta di reset della password per il tuo account PetFlow.\n\n");
+            testo.append("La tua nuova password temporanea è: ").append(nuovaPassword).append("\n\n");
+            testo.append("Ti consigliamo di accedere al più presto e cambiare questa password dalle impostazioni del tuo profilo per garantire la massima sicurezza.\n\n");
+            testo.append("Se non hai richiesto tu questo reset, contatta immediatamente il supporto.\n\n");
+            testo.append("Cordiali saluti,\nLo Staff di PetFlow 🐾");
+
+            helper.setText(testo.toString());
+            mailSender.send(message);
+
+            System.out.println("LOG: Email di reset inviata correttamente a " + destinatario);
+        } catch (MessagingException e) {
+            System.err.println("ERRORE INVIO MAIL RESET: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Invia una mail di conferma dopo che l'utente ha resettato la password con successo.
+     */
+    public void inviaConfermaCambioPassword(String destinatario) {
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, false);
+
+            helper.setFrom(emailSorgente);
+            helper.setTo(destinatario);
+            helper.setSubject("🔒 Sicurezza account: Password aggiornata");
+
+            StringBuilder testo = new StringBuilder();
+            testo.append("Ciao,\n\n");
+            testo.append("Ti confermiamo che la password del tuo account PetFlow è stata modificata correttamente.\n\n");
+            testo.append("Se hai effettuato tu questa operazione, puoi ignorare questa email.\n\n");
+            testo.append("Se NON hai richiesto tu il cambio della password, ti invitiamo a contattare immediatamente il nostro supporto o a provare a recuperare l'accesso al tuo profilo.\n\n");
+            testo.append("La sicurezza del tuo account è la nostra priorità.\n\n");
+            testo.append("Cordiali saluti,\nLo Staff di PetFlow 🐾");
+
+            helper.setText(testo.toString());
+            mailSender.send(message);
+
+            System.out.println("LOG: Email di conferma cambio password inviata a " + destinatario);
+        } catch (MessagingException e) {
+            System.err.println("ERRORE INVIO MAIL CONFERMA RESET: " + e.getMessage());
+        }
+    }
 }
