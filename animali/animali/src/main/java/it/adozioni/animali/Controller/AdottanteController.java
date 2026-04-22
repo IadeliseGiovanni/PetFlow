@@ -29,7 +29,7 @@ public class AdottanteController extends AbstractController<AdottanteDto> {
      * Permette sia all'ADOTTANTE che all'ADMIN di vedere i propri dati.
      */
     @GetMapping("/me")
-    @PreAuthorize("hasAnyRole('ADOTTANTE', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<AdottanteDto> getMe(Authentication authentication) {
         if (authentication == null) {
             return ResponseEntity.status(403).build();
@@ -37,7 +37,6 @@ public class AdottanteController extends AbstractController<AdottanteDto> {
         String email = authentication.getName();
         return ResponseEntity.ok(adottanteService.getMioProfilo(email));
     }
-
     /**
      * Endpoint richiesto dai test per la lettura tramite ID
      */
@@ -76,4 +75,8 @@ public class AdottanteController extends AbstractController<AdottanteDto> {
         adottanteService.delete(id);
     }
 
+    @PatchMapping("/{id}")
+    public ResponseEntity<AdottanteDto> patch(@PathVariable Integer id, @RequestBody AdottanteDto dto) {
+        return ResponseEntity.ok(adottanteService.patch(id, dto));
+    }
 }

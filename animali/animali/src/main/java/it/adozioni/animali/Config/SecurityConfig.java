@@ -53,6 +53,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/VisitaMedica/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/Adottante").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/Adottante").authenticated()
                         .requestMatchers(HttpMethod.GET, "/Volontario").authenticated()
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/Adottante/me").authenticated()

@@ -142,4 +142,37 @@ public class AdottanteService extends AbstractService<Adottante, AdottanteDto> i
                 .orElseThrow(() -> new RuntimeException("Utente non trovato"));
         return adottanteMapper.toDTO(entity);
     }
+
+    @Transactional
+    public AdottanteDto patch(Integer id, AdottanteDto dto) {
+        // 1. Recupero l'entità esistente dal DB
+        Adottante esistente = adottanteRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Adottante non trovato con ID: " + id));
+
+        // 2. Aggiorno solo i campi anagrafici se presenti nel DTO
+        if (dto.getNome() != null) {
+            esistente.setNome(dto.getNome());
+        }
+        if (dto.getCognome() != null) {
+            esistente.setCognome(dto.getCognome());
+        }
+        if (dto.getCodiceFiscale() != null) {
+            esistente.setCodiceFiscale(dto.getCodiceFiscale());
+        }
+        if (dto.getTelefono() != null) {
+            esistente.setTelefono(dto.getTelefono());
+        }
+        if (dto.getIndirizzo() != null) {
+            esistente.setIndirizzo(dto.getIndirizzo());
+        }
+        if (dto.getEmail() != null) {
+            esistente.setEmail(dto.getEmail());
+        }
+
+        // 3. Salvo l'entità aggiornata (la password rimane quella originale già presente in 'esistente')
+        Adottante salvato = adottanteRepository.save(esistente);
+
+        // 4. Ritorno il DTO aggiornato
+        return adottanteMapper.toDTO(salvato);
+    }
 }
