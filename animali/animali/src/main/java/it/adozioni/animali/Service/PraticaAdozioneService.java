@@ -102,10 +102,11 @@ public class PraticaAdozioneService {
         pratica.setStato(nuovoStato);
         pratica.setNoteAdmin(note);
 
-        if (nuovoStato == StatoPratica.APPROVATA) {
-            Animale animale = pratica.getAnimale();
-            Adottante adottante = pratica.getAdottante();
+        // Recuperiamo i dati necessari per le comunicazioni
+        Animale animale = pratica.getAnimale();
+        Adottante adottante = pratica.getAdottante();
 
+        if (nuovoStato == StatoPratica.APPROVATA) {
             animale.setAdottato(true);
             animale.setAdottante(adottante);
             animaleRepository.save(animale);
@@ -114,8 +115,20 @@ public class PraticaAdozioneService {
             byte[] pdf = documentoService.creaPdf(animale, adottante);
             if (pdf != null) {
                 emailService.inviaContrattoConAllegato(adottante.getEmail(), animale.getNome(), pdf);
+                // Opzionale: invia notifica anche a te stesso
+                emailService.inviaNotificaRicezioneAlCentro(adottante.getEmail(), animale.getNome());
             }
         }
+        // --- AGGIUNGI QUESTO BLOCCO ---
+        else if (nuovoStato == StatoPratica.RIFIUTATA) {
+            // Invio mail di notifica per il rifiuto
+            emailService.inviaNotificaRifiuto(
+                    adottante.getEmail(),
+                    adottante.getNome(),
+                    animale.getNome()
+            );
+        }
+        // ------------------------------
 
         return praticaMapper.toDTO(praticaRepository.save(pratica));
     }

@@ -54,6 +54,34 @@ public class EmailService {
         }
     }
 
+    /**
+     * Invia una mail all'adottante in caso di pratica rifiutata.
+     */
+    public void inviaNotificaRifiuto(String destinatario, String nomeAdottante, String nomeAnimale) {
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, false);
+
+            helper.setFrom(emailSorgente);
+            helper.setTo(destinatario);
+            helper.setSubject("Aggiornamento sulla tua richiesta di adozione per " + nomeAnimale);
+
+            StringBuilder testo = new StringBuilder();
+            testo.append("Gentile ").append(nomeAdottante).append(",\n\n");
+            testo.append("Ti ringraziamo per l'interesse mostrato nei confronti di ").append(nomeAnimale).append(".\n\n");
+            testo.append("Dopo un'attenta valutazione della tua richiesta, ti informiamo che purtroppo non è stato possibile procedere con l'adozione in questo momento.\n\n");
+            testo.append("Ti invitiamo a monitorare il nostro sito per altri piccoli amici in cerca di casa.\n\n");
+            testo.append("Cordiali saluti,\nLo Staff di PetFlow 🐾");
+
+            helper.setText(testo.toString());
+            mailSender.send(message);
+
+            System.out.println("LOG: Email di rifiuto inviata correttamente a " + destinatario);
+        } catch (MessagingException e) {
+            System.err.println("ERRORE INVIO MAIL RIFIUTO: " + e.getMessage());
+        }
+    }
+
     /**h
      * STEP 2: Invia una mail di notifica al Centro (a te stesso).
      */
