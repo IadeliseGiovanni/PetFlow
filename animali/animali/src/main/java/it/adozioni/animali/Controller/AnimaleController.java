@@ -67,7 +67,6 @@ public class AnimaleController extends AbstractController<AnimaleDto> {
     public ResponseEntity<?> generaContratto(@RequestBody AdozioneRequestDto adozioneDto) {
 
         if (adozioneDto == null || adozioneDto.getIdAnimale() == null || adozioneDto.getIdAdottante() == null) {
-            // FIX: Usiamo ResultDto.error invece della stringa
             return ResponseEntity.badRequest().body(ResultDto.error("Errore: Dati incompleti."));
         }
 
@@ -75,7 +74,6 @@ public class AnimaleController extends AbstractController<AnimaleDto> {
         Adottante adottante = adottanteService.findByIdEntity(adozioneDto.getIdAdottante());
 
         if (animale == null || adottante == null) {
-            // FIX: Incapsuliamo il messaggio nel ResultDto
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(ResultDto.error("Errore: Animale o Adottante non trovati nel database."));
         }
@@ -95,7 +93,6 @@ public class AnimaleController extends AbstractController<AnimaleDto> {
             return new ResponseEntity<>(pdf, headers, HttpStatus.OK);
 
         } catch (Exception e) {
-            // FIX: Il test vuole un'istanza di ResultDto anche qui
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(ResultDto.error("Errore critico durante il processo: Errore PDF"));
         }

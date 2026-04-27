@@ -1,10 +1,6 @@
 package it.adozioni.animali.Controller;
 
-import it.adozioni.animali.Dto.AnimaleDto;
-import it.adozioni.animali.Dto.CentroAdozioneDto;
 import it.adozioni.animali.Dto.VisitaMedicaDto;
-import it.adozioni.animali.Dto.VolontarioDto;
-import it.adozioni.animali.Model.VisitaMedica;
 import it.adozioni.animali.Service.AdottanteService;
 import it.adozioni.animali.Service.VisitaMedicaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +27,6 @@ public class VisitaMedicaController extends AbstractController<VisitaMedicaDto> 
     public List<VisitaMedicaDto> findByData(@RequestParam("data") LocalDateTime data) {
         return service.findByData(data);
     }
-//
     @GetMapping("/findByEsito")
     public List<VisitaMedicaDto> findByEsito(@RequestParam("esito") String esito) {
         return service.findByEsito(esito);

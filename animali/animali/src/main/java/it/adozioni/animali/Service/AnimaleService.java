@@ -32,7 +32,6 @@ public class AnimaleService extends AbstractService<Animale, AnimaleDto> {
     }
 
     public List<AnimaleDto> findAllDisponibili() {
-        // Recupera le entità e le trasforma in DTO tramite il mapper
         return animaleMapper.toDTOList(animaleRepository.findByAdottatoFalse());
     }
 
@@ -47,7 +46,6 @@ public class AnimaleService extends AbstractService<Animale, AnimaleDto> {
 
         List<Animale> lista = animaleRepository.findFiltered(s, g, centroId);
 
-        // Filtriamo solo quelli non adottati e mappiamo a DTO
         return animaleMapper.toDTOList(
                 lista.stream().filter(a -> !a.isAdottato()).collect(Collectors.toList())
         );

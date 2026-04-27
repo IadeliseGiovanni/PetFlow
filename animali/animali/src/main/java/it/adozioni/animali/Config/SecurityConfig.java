@@ -1,6 +1,5 @@
 package it.adozioni.animali.Config;
 
-import it.adozioni.animali.Config.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -33,7 +32,7 @@ public class SecurityConfig {
     @Profile("test")
     public SecurityFilterChain securityFilterChainTest(HttpSecurity http) throws Exception {
         http
-                .cors(cors -> {}) // <--- AGGIUNTO: Abilita il supporto CORS
+                .cors(cors -> {})
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
@@ -41,13 +40,13 @@ public class SecurityConfig {
                 );
         return http.build();
     }
-    //
+
     @Bean
     @Profile("!test")
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.configure(http)) // Assicurati che i CORS siano attivi
+                .cors(cors -> cors.configure(http))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.GET, "/api/**").permitAll()
@@ -59,6 +58,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/Adottante/me").authenticated()
                         .requestMatchers("/api/animali/**").authenticated()
+                        .requestMatchers("/api/Adottante/conferma-email").permitAll()
                         .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider)
@@ -67,16 +67,15 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // Questo bean definisce LE REGOLE dei CORS
     @Bean
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
 
         config.setAllowCredentials(true);
-        config.addAllowedOrigin("http://localhost:4200"); // Origine del tuo frontend Angular
-        config.addAllowedHeader("*"); // Permette Header come Authorization, Content-Type, ecc.
-        config.addAllowedMethod("*"); // Permette tutti i metodi (GET, POST, OPTIONS, ecc.)
+        config.addAllowedOrigin("http://localhost:4200");
+        config.addAllowedHeader("*");
+        config.addAllowedMethod("*");
 
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);

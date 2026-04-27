@@ -21,4 +21,3 @@ public interface VisitaMedicaRepository extends JpaRepository<VisitaMedica, Long
     List<VisitaMedica> findByDataAndEsito(LocalDateTime data, String esito);
 
 }
-//

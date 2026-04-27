@@ -51,7 +51,6 @@ public class Volontario implements UserDetails {
         if (this.ruolo == null || this.ruolo.isEmpty()) {
             return List.of();
         }
-        // Converte "USER" in "ROLE_USER" per Spring Security
         String r = this.ruolo.toUpperCase();
         if (!r.startsWith("ROLE_")) r = "ROLE_" + r;
         return List.of(new SimpleGrantedAuthority(r));

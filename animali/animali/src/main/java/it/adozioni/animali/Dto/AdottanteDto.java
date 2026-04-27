@@ -33,7 +33,6 @@ public class AdottanteDto {
     private String indirizzo;
     private String codiceFiscale;
     private List<Animale> animaliAdottati;
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY) // permette di ricevere password durante la registrazione
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
-//
 }

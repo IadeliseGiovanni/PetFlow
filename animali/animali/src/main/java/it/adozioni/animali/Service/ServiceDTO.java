@@ -15,4 +15,3 @@ public interface ServiceDTO<DTO> {
 
     public void delete (Long id);
 }
-//

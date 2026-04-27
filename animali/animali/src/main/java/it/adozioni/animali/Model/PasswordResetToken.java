@@ -1,6 +1,5 @@
 package it.adozioni.animali.Model;
 
-import it.adozioni.animali.Model.Adottante;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

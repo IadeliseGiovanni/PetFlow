@@ -37,24 +37,18 @@ public class PraticaAdozioneService {
     @Transactional
     public PraticaAdozioneDto avviaPratica(Adottante utente, Long animaleId) {
 
-        // 1. Recupero l'animale e verifico che esista
         Animale animale = animaleRepository.findById(animaleId)
                 .orElseThrow(() -> new RuntimeException("Errore: Animale con ID " + animaleId + " non trovato."));
 
-        // 2. Controllo Idoneità dell'utente (campo isSchedato)
-        // Se isSchedato è null o false, l'utente non può ancora adottare
         if (utente.getIsSchedato() == null || !utente.getIsSchedato()) {
             throw new RuntimeException("Accesso negato: Il tuo profilo è in fase di verifica. " +
                     "Potrai avviare pratiche solo dopo l'approvazione dell'idoneità.");
         }
 
-        // 3. Controllo se l'animale è già stato adottato ufficialmente
         if (animale.isAdottato()) {
             throw new RuntimeException("Spiacenti, " + animale.getNome() + " è già stato adottato.");
         }
 
-        // 4. Controllo Duplicati: l'utente ha già una pratica APERTA per questo specifico animale?
-        // Escludiamo le pratiche RIFIUTATE (se è stata rifiutata in passato, può riprovare)
         boolean giaInCorso = praticaRepository.existsByAdottanteIdAndAnimaleIdAndStatoNot(
                 utente.getId(),
                 animaleId,
@@ -65,7 +59,6 @@ public class PraticaAdozioneService {
             throw new RuntimeException("Hai già una pratica attiva o in valutazione per " + animale.getNome() + ".");
         }
 
-        // 5. Creazione della nuova entità Pratica
         PraticaAdozione nuovaPratica = new PraticaAdozione();
         nuovaPratica.setAdottante(utente);
         nuovaPratica.setAnimale(animale);
@@ -73,10 +66,8 @@ public class PraticaAdozioneService {
         nuovaPratica.setDataApertura(LocalDateTime.now());
         nuovaPratica.setNoteAdmin("In attesa di prima revisione.");
 
-        // 6. Salvataggio su DB
         PraticaAdozione salvata = praticaRepository.save(nuovaPratica);
 
-        // 7. Ritorno il DTO tramite il mapper
         return praticaMapper.toDTO(salvata);
     }
 
@@ -102,7 +93,6 @@ public class PraticaAdozioneService {
         pratica.setStato(nuovoStato);
         pratica.setNoteAdmin(note);
 
-        // Recuperiamo i dati necessari per le comunicazioni
         Animale animale = pratica.getAnimale();
         Adottante adottante = pratica.getAdottante();
 
@@ -111,25 +101,19 @@ public class PraticaAdozioneService {
             animale.setAdottante(adottante);
             animaleRepository.save(animale);
 
-            // Generazione e Invio Contratto
             byte[] pdf = documentoService.creaPdf(animale, adottante);
             if (pdf != null) {
                 emailService.inviaContrattoConAllegato(adottante.getEmail(), animale.getNome(), pdf);
-                // Opzionale: invia notifica anche a te stesso
                 emailService.inviaNotificaRicezioneAlCentro(adottante.getEmail(), animale.getNome());
             }
         }
-        // --- AGGIUNGI QUESTO BLOCCO ---
         else if (nuovoStato == StatoPratica.RIFIUTATA) {
-            // Invio mail di notifica per il rifiuto
             emailService.inviaNotificaRifiuto(
                     adottante.getEmail(),
                     adottante.getNome(),
                     animale.getNome()
             );
         }
-        // ------------------------------
-
         return praticaMapper.toDTO(praticaRepository.save(pratica));
     }
 

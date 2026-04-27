@@ -16,8 +16,6 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
-    // Se la chiave non viene trovata in application.properties,
-    // usiamo questa di default che è una stringa Base64 valida e sicura.
     @Value("${jwt.secret:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}")
     private String secretKey;
 
@@ -34,12 +32,10 @@ public class JwtService {
         return Jwts.builder()
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                // Scadenza impostata a 10 ore
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
-//
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
@@ -62,7 +58,6 @@ public class JwtService {
     }
 
     private Key getSignInKey() {
-        // La funzione decode pulisce la stringa da eventuali spazi prima di procedere
         byte[] keyBytes = Decoders.BASE64.decode(secretKey.trim());
         return Keys.hmacShaKeyFor(keyBytes);
     }

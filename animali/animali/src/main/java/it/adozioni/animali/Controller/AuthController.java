@@ -42,10 +42,6 @@ public class AuthController {
     @Autowired
     private EmailService emailService;
 
-    /**
-     * Registrazione Adottante.
-     * Risolve l'errore su "registra" richiamando il metodo pubblico del Service.
-     */
     @PostMapping("/register/adottante")
     public ResponseEntity<?> register(@RequestBody AdottanteDto dto) {
         try {
@@ -58,9 +54,6 @@ public class AuthController {
         }
     }
 
-    /**
-     * Registrazione Volontario.
-     */
     @PostMapping("/register/volontario")
     public ResponseEntity<?> registerVolontario(@RequestBody VolontarioDto dto) {
         try {
@@ -71,9 +64,7 @@ public class AuthController {
         }
     }
 
-    /**
-     * Login centralizzato con gestione dei ruoli dinamica (RBAC).
-     */
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
         try {
@@ -87,11 +78,10 @@ public class AuthController {
             Map<String, Object> response = new HashMap<>();
             response.put("token", token);
 
-            // Riconoscimento del tipo di utente nel payload di risposta
             if (principal instanceof Adottante) {
                 Adottante a = (Adottante) principal;
                 response.put("nome", a.getNome());
-                response.put("ruolo", a.getRuolo()); // USER o ADMIN
+                response.put("ruolo", a.getRuolo());
             } else if (principal instanceof Volontario) {
                 Volontario v = (Volontario) principal;
                 response.put("nome", v.getNome());
@@ -112,9 +102,6 @@ public class AuthController {
         }
     }
 
-    /**
-     * Endpoint per la verifica del token via mail.
-     */
     @GetMapping("/verify")
     public ResponseEntity<?> verifyUser(@RequestParam("token") String token) {
         boolean verified = adottanteService.verifyToken(token);
@@ -124,14 +111,10 @@ public class AuthController {
         return ResponseEntity.badRequest().body("Token non valido o scaduto.");
     }
 
-    /**
-     * Reinvio mail di attivazione.
-     * Risolve l'errore "cannot find symbol" richiamando findByEmailEntity.
-     */
     @PostMapping("/resend-verification")
     public ResponseEntity<?> resendVerification(@RequestParam String email) {
         try {
-            // Cerca l'entità Adottante direttamente sul DB
+
             Adottante adottante = adottanteService.findByEmailEntity(email);
 
             if (adottante == null) {
@@ -142,7 +125,6 @@ public class AuthController {
                 return ResponseEntity.badRequest().body("Errore: L'account è già attivo.");
             }
 
-            // Invia nuovamente la mail tramite EmailService
             adottanteService.inviaEmailVerifica(adottante.getEmail(), adottante.getVerificationToken());
 
             return ResponseEntity.ok("Email di verifica reinviata con successo!");
@@ -152,25 +134,19 @@ public class AuthController {
         }
     }
 
-    // AuthController.java
 
     @PostMapping("/forgot-password")
     public ResponseEntity<?> forgotPassword(@RequestParam String email) {
         try {
-            // 1. Cerchiamo l'utente (Adottante o Volontario)
             Adottante adottante = adottanteService.findByEmailEntity(email);
             if (adottante == null) {
                 return ResponseEntity.ok("Se l'email è registrata, riceverai un link a breve.");
             }
 
-            // 2. Generiamo un token univoco (UUID)
             String token = UUID.randomUUID().toString();
 
-            // 3. Salviamo il token nel DB associato all'utente
-            // (Assicurati di avere un campo 'resetToken' nel model Adottante)
             adottanteService.salvaResetToken(adottante.getId(), token);
 
-            // 4. Inviamo l'email tramite il tuo EmailService
             emailService.sendResetEmail(email, token);
 
             return ResponseEntity.ok("Email di reset inviata.");
@@ -187,7 +163,6 @@ public class AuthController {
         boolean success = adottanteService.aggiornaPasswordConToken(token, newPassword);
 
         if (success) {
-            // Restituisci una mappa, che Spring trasformerà in JSON { "message": "..." }
             return ResponseEntity.ok(Map.of("message", "Password aggiornata con successo!"));
         }
         return ResponseEntity.badRequest().body(Map.of("error", "Token non valido o scaduto."));

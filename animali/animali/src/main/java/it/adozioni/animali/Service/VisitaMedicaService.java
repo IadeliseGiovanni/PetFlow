@@ -1,8 +1,7 @@
 package it.adozioni.animali.Service;
 
-import it.adozioni.animali.Dto.AnimaleDto; // NECESSARIO per l'override
+import it.adozioni.animali.Dto.AnimaleDto;
 import it.adozioni.animali.Dto.VisitaMedicaDto;
-import it.adozioni.animali.Mapper.Converter;
 import it.adozioni.animali.Mapper.VisitaMedicaMapper;
 import it.adozioni.animali.Model.VisitaMedica;
 import it.adozioni.animali.Repository.VisitaMedicaRepository;
@@ -23,7 +22,6 @@ public class VisitaMedicaService extends AbstractService<VisitaMedica, VisitaMed
     @Autowired
     public VisitaMedicaService(VisitaMedicaRepository repository,
                                VisitaMedicaMapper mapper) {
-        // Passiamo al costruttore di AbstractService il repository e il mapper (che è un Converter)
         super(repository, mapper);
         this.visitaMedicaRepository = repository;
         this.visitaMedicaMapper = mapper;
@@ -33,26 +31,16 @@ public class VisitaMedicaService extends AbstractService<VisitaMedica, VisitaMed
         return visitaMedicaMapper.toDTOList(repository.findAll());
     }
 
-    /**
-     * 🟢 FIX OBBLIGATORIO PER L'ERRORE DI COMPILAZIONE
-     * Questo metodo DEVE esserci perché l'AbstractService lo richiede.
-     * Restituiamo una lista vuota di AnimaleDto per far stare zitto il compilatore.
-     */
     @Override
     public List<AnimaleDto> findAll() {
         return new ArrayList<>();
     }
 
-    /**
-     * 🟢 IL VERO METODO FIND ALL PER LE VISITE
-     * Questo è quello che userai nel Controller.
-     */
     @Transactional(readOnly = true)
     public List<VisitaMedicaDto> findAllVisite() {
         return visitaMedicaMapper.toDTOList(visitaMedicaRepository.findAll());
     }
 
-    // --- METODI DI RICERCA SPECIFICI ---
 
     public List<VisitaMedicaDto> findByData(LocalDateTime data) {
         return visitaMedicaMapper.toDTOList(visitaMedicaRepository.findByData(data));

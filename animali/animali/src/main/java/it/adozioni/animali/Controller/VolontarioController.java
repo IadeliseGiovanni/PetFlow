@@ -1,7 +1,7 @@
 package it.adozioni.animali.Controller;
 
 import it.adozioni.animali.Dto.VolontarioDto;
-import it.adozioni.animali.Service.AdottanteService; // Obbligatorio per l'Abstract
+import it.adozioni.animali.Service.AdottanteService;
 import it.adozioni.animali.Service.VolontarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,16 +18,12 @@ public class VolontarioController extends AbstractController<VolontarioDto> {
     private VolontarioService service;
 
     @Override
-    @SuppressWarnings("unchecked")
     protected AdottanteService getService() {
-        // Restituiamo il nostro service castato a AdottanteService per "mentire" all'abstract
-        // Se AdottanteService è una classe specifica, questo è l'unico modo per compilare.
         return (AdottanteService) (Object) service;
     }
 
     @GetMapping("/all")
     public ResponseEntity<List<VolontarioDto>> getAll() {
-        // Usiamo il metodo reale creato nel service dei volontari
         return ResponseEntity.ok(service.findAllVolontari());
     }
 

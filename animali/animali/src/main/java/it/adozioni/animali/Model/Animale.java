@@ -25,14 +25,12 @@ public class Animale {
     private String specie;
     private String razza;
     private int eta;
-//
     @Column(name = "genere")
     private String genere;
 
     @Column(columnDefinition = "TEXT")
     private String descrizione;
 
-    // Nome allineato al DB: 'adottato'
     private boolean adottato;
 
     private String microchip;
@@ -41,17 +39,16 @@ public class Animale {
     @Column(name = "video_url")
     private String videoUrl;
 
-    // Se non usi Lombok, aggiungi anche Getter e Setter per videoUrl
     @OneToMany(mappedBy = "animale")
     private List<VisitaMedica> visiteMediche;
 
     @ManyToOne
-    @JoinColumn(name="adottante_id", nullable = true) // Permette ID nullo
+    @JoinColumn(name="adottante_id", nullable = true)
     @JsonIgnore
     private Adottante adottante;
 
     @ManyToOne
-    @JoinColumn(name = "centri_adozione_id", nullable = true) // Fondamentale: cambiato in TRUE
+    @JoinColumn(name = "centri_adozione_id", nullable = true)
     @JsonIgnore
     private CentroAdozione centroAdozione;
 

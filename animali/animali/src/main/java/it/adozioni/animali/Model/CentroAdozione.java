@@ -12,8 +12,8 @@ import java.util.List;
 @Setter
 @Entity
 @NoArgsConstructor
-@AllArgsConstructor //opzionale mettere quando serve
-@Table(name = "centri_adozione", schema = "public")//
+@AllArgsConstructor
+@Table(name = "centri_adozione", schema = "public")
 public class CentroAdozione {
 
     @Id

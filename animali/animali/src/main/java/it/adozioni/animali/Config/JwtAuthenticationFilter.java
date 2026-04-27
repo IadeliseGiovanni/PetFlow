@@ -7,7 +7,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy; // IMPORT AGGIUNTO
+import org.springframework.context.annotation.Lazy;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,7 +25,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private JwtService jwtService;
 
     @Autowired
-    @Lazy // AGGIUNTO @Lazy PER ROMPERE IL CICLO DI DIPENDENZE
+    @Lazy
     private AdottanteService adottanteService;
 
     @Override
@@ -35,7 +35,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
 
-        // Salta il controllo se l'URL riguarda l'autenticazione (es. login/register)
         if (request.getServletPath().contains("/api/auth")) {
             filterChain.doFilter(request, response);
             return;
@@ -49,7 +48,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-//
+
         jwt = authHeader.substring(7);
         userEmail = jwtService.extractUsername(jwt);
 

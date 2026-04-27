@@ -17,7 +17,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "adottante", schema = "public")
-public class Adottante implements UserDetails { //implementando dice usa questa classe per gestire il login
+public class Adottante implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,8 +26,6 @@ public class Adottante implements UserDetails { //implementando dice usa questa 
     private String nome;
     private String cognome;
 
-    // AGGIUNTO: unique = true per impedire i duplicati che bloccavano il login
-    // UNIQUE true è importante perchè impedisce a due persone di registrare con lo stesso indirizzo
     @Column(unique = true, nullable = false)
     private String email;
 
@@ -51,15 +49,14 @@ public class Adottante implements UserDetails { //implementando dice usa questa 
     private boolean enabled = false;
     private String verificationToken;
 
-    @OneToMany(mappedBy = "adottante")//
+    @OneToMany(mappedBy = "adottante")
     private List<Animale> animaliAdottati;
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() { // trasforma stringa come USER a ROLE_USER
+    public Collection<? extends GrantedAuthority> getAuthorities() {
         if (this.ruolo == null || this.ruolo.isEmpty()) {
             return List.of();
         }
-        // Converte "USER" in "ROLE_USER" per Spring Security
         String r = this.ruolo.toUpperCase();
         if (!r.startsWith("ROLE_")) r = "ROLE_" + r;
         return List.of(new SimpleGrantedAuthority(r));
@@ -76,8 +73,6 @@ public class Adottante implements UserDetails { //implementando dice usa questa 
 
     @Override
     public boolean isAccountNonLocked() {
-        // L'account è sempre sbloccato, a meno che tu non voglia
-        // aggiungere un campo apposito "isBloccato" nel DB.
         return true;
     }
 

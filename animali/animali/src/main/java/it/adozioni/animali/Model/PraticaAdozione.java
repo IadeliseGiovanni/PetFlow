@@ -33,5 +33,5 @@ public class PraticaAdozione {
     private LocalDateTime dataApertura = LocalDateTime.now();
 
     @Column(columnDefinition = "TEXT")
-    private String noteAdmin; // Per commenti dell'admin durante la valutazione
+    private String noteAdmin;
 }

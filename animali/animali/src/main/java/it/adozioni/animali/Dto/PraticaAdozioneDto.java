@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 public class PraticaAdozioneDto {
     private Long id;
     private Long adottanteId;
-    private String adottanteNominativo; // Nome + Cognome uniti
+    private String adottanteNominativo;
     private Long animaleId;
     private String animaleNome;
     private StatoPratica stato;

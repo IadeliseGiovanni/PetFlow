@@ -8,7 +8,6 @@ import java.util.List;
 public interface PraticaAdozioneRepository extends JpaRepository<PraticaAdozione, Long> {
     List<PraticaAdozione> findByAdottanteId(Long adottanteId);
 
-    // Utile per controllare se esiste già una pratica aperta per lo stesso animale dallo stesso utente
     boolean existsByAdottanteIdAndAnimaleIdAndStatoNot(Long adottanteId, Long animaleId, StatoPratica stato);
 
 

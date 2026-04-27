@@ -1,8 +1,5 @@
 package it.adozioni.animali.Mapper;
 
-import it.adozioni.animali.Dto.CentroAdozioneDto;
-import it.adozioni.animali.Model.CentroAdozione;
-
 import java.util.ArrayList;
 import java.util.List;
 

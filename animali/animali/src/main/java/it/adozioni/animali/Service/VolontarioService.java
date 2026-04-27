@@ -1,6 +1,6 @@
 package it.adozioni.animali.Service;
 
-import it.adozioni.animali.Dto.AnimaleDto; // IMPORTANTE per il metodo obbligatorio
+import it.adozioni.animali.Dto.AnimaleDto;
 import it.adozioni.animali.Dto.VolontarioDto;
 import it.adozioni.animali.Mapper.VolontarioMapper;
 import it.adozioni.animali.Model.Volontario;
@@ -32,19 +32,11 @@ public class VolontarioService extends AbstractService<Volontario, VolontarioDto
         this.passwordEncoder = passwordEncoder;
     }
 
-    /**
-     * 🟢 FIX OBBLIGATORIO PER L'ERRORE DI COMPILAZIONE
-     * Questo metodo deve esistere con questa firma esatta per AbstractService.
-     */
     @Override
     public List<AnimaleDto> findAll() {
-        // Restituiamo una lista vuota per "accontentare" la classe madre
         return new ArrayList<>();
     }
 
-    /**
-     * 🟢 IL VERO METODO FIND ALL PER VOLONTARI
-     */
     @Transactional(readOnly = true)
     public List<VolontarioDto> findAllVolontari() {
         return volontarioMapper.toDTOList(volontarioRepository.findAll());
@@ -70,20 +62,17 @@ public class VolontarioService extends AbstractService<Volontario, VolontarioDto
 
         entity.setPassword(passwordEncoder.encode(dto.getPassword()));
 
-        // Impostiamo il ruolo: se non c'è, mettiamo ADMIN per i tuoi test
         if (entity.getRuolo() == null || entity.getRuolo().isEmpty()) {
             entity.setRuolo("ADMIN");
         } else {
             entity.setRuolo(entity.getRuolo().toUpperCase());
         }
 
-        entity.setEnabled(true); // Un volontario solitamente è attivo subito
+        entity.setEnabled(true);
 
         Volontario salvato = volontarioRepository.save(entity);
         return volontarioMapper.toDTO(salvato);
     }
-
-    // --- METODI DI RICERCA ---
 
     public Volontario findByEmailEntity(String email) {
         return volontarioRepository.findByEmail(email).orElse(null);

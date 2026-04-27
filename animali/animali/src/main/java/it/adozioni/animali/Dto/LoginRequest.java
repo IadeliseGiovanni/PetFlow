@@ -3,16 +3,12 @@ package it.adozioni.animali.Dto;
 public class LoginRequest {
     private String email;
     private String password;
-
-    // Costruttore vuoto (necessario per Jackson/Spring)
     public LoginRequest() {}
 
     public LoginRequest(String email, String password) {
         this.email = email;
         this.password = password;
     }
-
-    // Getter e Setter (Fondamentali!)
     public String getEmail() {
         return email;
     }
@@ -28,5 +24,4 @@ public class LoginRequest {
     public void setPassword(String password) {
         this.password = password;
     }
-    //
 }

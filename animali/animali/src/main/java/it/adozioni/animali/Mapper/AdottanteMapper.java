@@ -14,7 +14,6 @@ public class AdottanteMapper extends AbstractConverter<Adottante, AdottanteDto> 
     public AdottanteDto toDTO(Adottante entity) {
         if (entity == null) return null;
         AdottanteDto dto = mapper.map(entity, AdottanteDto.class);
-        // Opzionale: per sicurezza non restituiamo mai la password nel DTO verso il client
         dto.setPassword(null);
         return dto;
     }

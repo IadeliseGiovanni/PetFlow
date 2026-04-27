@@ -1,6 +1,5 @@
 package it.adozioni.animali.Model;
 
-import it.adozioni.animali.Model.Adottante;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,7 +16,7 @@ public class EmailConfirmationToken {
     private Long id;
 
     @Column(nullable = false)
-    private String token; // UUID unico
+    private String token;
 
     @Column(nullable = false)
     private String nuovaEmail;
@@ -34,6 +33,6 @@ public class EmailConfirmationToken {
         this.adottante = adottante;
         this.nuovaEmail = nuovaEmail;
         this.token = UUID.randomUUID().toString();
-        this.dataScadenza = LocalDateTime.now().plusHours(24); // Scade dopo 24h
+        this.dataScadenza = LocalDateTime.now().plusHours(24);
     }
 }

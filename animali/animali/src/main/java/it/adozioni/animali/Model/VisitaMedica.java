@@ -1,7 +1,6 @@
 package it.adozioni.animali.Model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import it.adozioni.animali.Model.Animale;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

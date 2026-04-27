@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public abstract class AbstractService<ENTITY,DTO> implements ServiceDTO<DTO> {
-//metodi CRUD Generalizzati
 
     protected JpaRepository<ENTITY,Long> repository;
     protected Converter<ENTITY,DTO> converter;
@@ -47,4 +46,3 @@ public abstract class AbstractService<ENTITY,DTO> implements ServiceDTO<DTO> {
 
     public abstract List<AnimaleDto> findAll();
 }
-//

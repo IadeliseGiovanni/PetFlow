@@ -24,7 +24,6 @@ public class DocumentoService {
             PdfWriter writer = PdfWriter.getInstance(document, out);
             document.open();
 
-            // --- 1. BACKGROUND (Sage Green) ---
             PdfContentByte canvas = writer.getDirectContentUnder();
             canvas.saveState();
             canvas.setColorFill(new Color(220, 228, 201));
@@ -32,7 +31,6 @@ public class DocumentoService {
             canvas.fill();
             canvas.restoreState();
 
-            // --- 2. PALETTE COLORI E STILI FONT ---
             Color forestGreen = new Color(30, 81, 40);
             Color darkEarth = new Color(62, 39, 35);
 
@@ -42,13 +40,11 @@ public class DocumentoService {
             Font fontText = FontFactory.getFont(FontFactory.HELVETICA, 10, Color.BLACK);
             Font fontSmall = FontFactory.getFont(FontFactory.HELVETICA, 8, Color.DARK_GRAY);
 
-            // --- 3. HEADER ---
             Paragraph header = new Paragraph("SISTEMA NAZIONALE GESTIONE RIFUGI\nProtocollo Adozioni Interno", fontSub);
             header.setAlignment(Element.ALIGN_RIGHT);
             document.add(header);
             document.add(new Paragraph("\n"));
 
-            // --- 4. TITOLO E DATA ---
             Paragraph titolo = new Paragraph("CERTIFICATO DI ADOZIONE DEFINITIVA", fontTitle);
             titolo.setAlignment(Element.ALIGN_CENTER);
             titolo.setSpacingAfter(5);
@@ -60,7 +56,6 @@ public class DocumentoService {
             document.add(data);
             document.add(new Paragraph("\n\n"));
 
-            // --- 5. ART. 1: DATI ADOTTANTE ---
             document.add(new Paragraph("ART. 1 - DATI DELL'AFFIDATARIO", fontSection));
             String nomeCompleto = (adottante.getNome() != null ? adottante.getNome().toUpperCase() : "N.D.") + " " +
                     (adottante.getCognome() != null ? adottante.getCognome().toUpperCase() : "N.D.");
@@ -70,7 +65,6 @@ public class DocumentoService {
                     "assumendone la custodia legale e l'onere del mantenimento.", fontText));
             document.add(new Paragraph("\n"));
 
-            // --- 6. ART. 2: IDENTIFICAZIONE ANIMALE ---
             document.add(new Paragraph("ART. 2 - IDENTIFICAZIONE ANIMALE", fontSection));
             document.add(new Paragraph("___________________________________________________________", FontFactory.getFont(FontFactory.HELVETICA, 8, Color.WHITE)));
 
@@ -94,7 +88,6 @@ public class DocumentoService {
             document.add(infoAnimale);
             document.add(new Paragraph("\n"));
 
-            // --- 7. ART. 3: VINCOLI LEGALI ---
             document.add(new Paragraph("ART. 3 - VINCOLI CONTRATTUALI", fontSection));
             Paragraph clausole = new Paragraph();
             clausole.setFont(fontSmall);
@@ -107,7 +100,6 @@ public class DocumentoService {
 
             document.add(new Paragraph("\n\n\n\n"));
 
-            // --- 8. FIRME ---
             Paragraph firme = new Paragraph();
             firme.setAlignment(Element.ALIGN_CENTER);
             firme.add(new Chunk("IL RESPONSABILE DEL CENTRO\n", fontSub));
@@ -119,13 +111,12 @@ public class DocumentoService {
             firme.add(new Chunk("____________________________", fontSub));
             document.add(firme);
 
-            // --- 9. FOOTER ---
             Paragraph footer = new Paragraph("\n\n🐾 Documento generato elettronicamente dal sistema 'PetFlow'.", fontSmall);
             footer.setAlignment(Element.ALIGN_CENTER);
             document.add(footer);
 
             document.close();
-            return out.toByteArray(); // Restituisci i byte dopo la chiusura
+            return out.toByteArray();
 
         } catch (Exception e) {
             e.printStackTrace();

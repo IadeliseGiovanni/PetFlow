@@ -13,23 +13,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class EmailService {
 
-    @Autowired //inietta la dipendenza
+    @Autowired
     private JavaMailSender mailSender;
 
-    // Questa variabile conterrà "iadelisegiovanni2000@gmail.com" presa dal properties
     @Value("${spring.mail.username}")
     private String emailSorgente;
 
-    /**
-     * STEP 1: Invia il contratto PDF all'adottante.
-     */
     public void inviaContrattoConAllegato(String destinatario, String nomeAnimale, byte[] pdfContenuto) {
         try {
             MimeMessage message = mailSender.createMimeMessage();
-            // Il parametro true indica che la mail è multiparte (testo + allegato)
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
 
-            // IMPORTANTE: Imposta la TUA email come mittente ufficiale
             helper.setFrom(emailSorgente);
             helper.setTo(destinatario);
             helper.setSubject("🎉 Congratulazioni! Il contratto per " + nomeAnimale + " è pronto");
@@ -43,7 +37,6 @@ public class EmailService {
 
             helper.setText(corpoMail.toString());
 
-            // Nome dinamico del file basato sull'animale
             String nomeFile = "Contratto_" + nomeAnimale.replace(" ", "_") + ".pdf";
             helper.addAttachment(nomeFile, new ByteArrayResource(pdfContenuto));
 
@@ -54,9 +47,6 @@ public class EmailService {
         }
     }
 
-    /**
-     * Invia una mail all'adottante in caso di pratica rifiutata.
-     */
     public void inviaNotificaRifiuto(String destinatario, String nomeAdottante, String nomeAnimale) {
         try {
             MimeMessage message = mailSender.createMimeMessage();
@@ -82,16 +72,13 @@ public class EmailService {
         }
     }
 
-    /**h
-     * STEP 2: Invia una mail di notifica al Centro (a te stesso).
-     */
     public void inviaNotificaRicezioneAlCentro(String emailAdottante, String nomeAnimale) {
         try {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, false);
 
             helper.setFrom(emailSorgente);
-            helper.setTo(emailSorgente); // La notifica arriva a te stesso come amministratore
+            helper.setTo(emailSorgente);
             helper.setSubject("✅ CONFERMA RICEZIONE SISTEMA: " + nomeAnimale);
 
             String testo = "REPORT DI SISTEMA - ACCADEMIJAVA\n\n" +
@@ -144,9 +131,6 @@ public class EmailService {
         }
     }
 
-    /**
-     * Invia una mail di conferma dopo che l'utente ha resettato la password con successo.
-     */
     public void inviaConfermaCambioPassword(String destinatario) {
         try {
             MimeMessage message = mailSender.createMimeMessage();
@@ -216,7 +200,6 @@ public class EmailService {
     }
 
     public void sendResetEmail(String userEmail, String token) {
-        // Il link punta alla rotta che creerai in Angular
         String resetUrl = "http://localhost:4200/reset-password?token=" + token;
 
         try {
@@ -226,7 +209,6 @@ public class EmailService {
             helper.setTo(userEmail);
             helper.setSubject("PetFlow - Recupero Password");
 
-            // Testo HTML dell'email
             String content = "<h3>Richiesta di Reset Password</h3>"
                     + "<p>Ciao,</p>"
                     + "<p>Abbiamo ricevuto una richiesta di reset password per il tuo account PetFlow.</p>"
@@ -238,7 +220,7 @@ public class EmailService {
                     + "<p>Se non hai richiesto tu il reset, ignora questa email.</p>"
                     + "<br><p>Il team PetFlow 🐾</p>";
 
-            helper.setText(content, true); // 'true' indica che è HTML
+            helper.setText(content, true);
 
             mailSender.send(message);
         } catch (MessagingException e) {

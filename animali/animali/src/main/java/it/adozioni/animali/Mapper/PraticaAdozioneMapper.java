@@ -15,14 +15,12 @@ public class PraticaAdozioneMapper extends AbstractConverter<PraticaAdozione, Pr
 
     @PostConstruct
     public void init() {
-        // Configurazione per mappare correttamente i campi annidati nel DTO
         mapper.addMappings(new PropertyMap<PraticaAdozione, PraticaAdozioneDto>() {
             @Override
             protected void configure() {
                 map().setAdottanteId(source.getAdottante().getId());
                 map().setAnimaleId(source.getAnimale().getId());
                 map().setAnimaleNome(source.getAnimale().getNome());
-                // Uniamo nome e cognome per il frontend
                 using(ctx -> {
                     PraticaAdozione p = (PraticaAdozione) ctx.getSource();
                     return p.getAdottante().getNome() + " " + p.getAdottante().getCognome();

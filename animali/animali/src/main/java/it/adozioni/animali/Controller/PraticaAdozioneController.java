@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/pratiche")
-@CrossOrigin(origins = "*") // Opzionale: per gestire CORS se necessario
+@CrossOrigin(origins = "*")
 public class PraticaAdozioneController {
 
     @Autowired
@@ -25,46 +25,31 @@ public class PraticaAdozioneController {
     @Autowired
     private AdottanteRepository adottanteRepository;
 
-    /**
-     * Avvia una nuova pratica di adozione.
-     * Il Principal viene iniettato automaticamente da Spring Security tramite il token JWT.
-     */
     @PostMapping("/avvia/{animaleId}")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<?> avviaPratica(@PathVariable Long animaleId, Principal principal) {
         try {
-            // 1. Recupero l'utente loggato partendo dall'email nel token
             Adottante utenteLoggato = adottanteRepository.findByEmail(principal.getName())
                     .orElseThrow(() -> new RuntimeException("Utente non trovato nel sistema."));
 
-            // 2. Chiamo il service per la logica di business
             PraticaAdozioneDto nuovaPratica = praticaService.avviaPratica(utenteLoggato, animaleId);
 
-            // 3. Restituisco la pratica creata con stato 201 Created
             return new ResponseEntity<>(nuovaPratica, HttpStatus.CREATED);
 
         } catch (RuntimeException e) {
-            // Se il service lancia un errore (es. non idoneo), mandiamo un 400 Bad Request
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
-            // Errore generico del server
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Si è verificato un errore imprevisto durante l'avvio della pratica.");
         }
     }
 
-    /**
-     * Endpoint per l'Admin: recupera tutte le pratiche nel sistema.
-     */
     @GetMapping("/admin/all")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<PraticaAdozioneDto>> getAllPratiche() {
-        return ResponseEntity.ok(praticaService.getAllPratiche()); // Assicurati di avere questo metodo nel service
+        return ResponseEntity.ok(praticaService.getAllPratiche());
     }
 
-    /**
-     * Endpoint per l'utente: recupera solo le proprie pratiche.
-     */
     @GetMapping("/mie-pratiche")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<PraticaAdozioneDto>> getMiePratiche(Principal principal) {
@@ -73,13 +58,6 @@ public class PraticaAdozioneController {
         return ResponseEntity.ok(praticaService.getPraticheByUtente(utente.getId()));
     }
 
-    /**
-     * Endpoint per l'Admin: Approva o Rifiuta una pratica.
-     */
-    /**
-     * Endpoint per l'Admin per approvare o rifiutare una pratica.
-     * Esempio: PATCH /api/pratiche/admin/10/stato?nuovoStato=APPROVATA
-     */
     @PatchMapping("/admin/{id}/stato")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> cambiaStatoPratica(

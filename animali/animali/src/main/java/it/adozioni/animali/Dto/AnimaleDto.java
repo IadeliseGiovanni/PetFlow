@@ -21,7 +21,6 @@ public class AnimaleDto {
     private int eta;
     private String genere;
 
-    // Cambiato da isAdottato a adottato per coerenza totale
     private boolean adottato;
 
     private List<VisitaMedica> visiteMediche;
@@ -32,5 +31,5 @@ public class AnimaleDto {
     private String descrizione;
     private String videoUrl;
     private String fotoUrl;
-    //
+
 }

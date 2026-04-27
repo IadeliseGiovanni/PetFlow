@@ -23,7 +23,6 @@ public class ApplicationConfig {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        // La Lambda recupera l'utente dal database tramite email
         return username -> repository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Utente non trovato con email: " + username));
     }
@@ -32,15 +31,12 @@ public class ApplicationConfig {
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
 
-        // Usiamo this.userDetailsService() per puntare chiaramente al Bean sopra
         authProvider.setUserDetailsService(this.userDetailsService());
 
-        // Impostiamo l'encoder per la verifica delle password hashate
         authProvider.setPasswordEncoder(passwordEncoder());
 
         return authProvider;
     }
-//
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

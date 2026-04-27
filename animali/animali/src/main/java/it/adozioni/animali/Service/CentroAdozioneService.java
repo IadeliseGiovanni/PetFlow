@@ -20,8 +20,6 @@ public class CentroAdozioneService implements ServiceDTO<CentroAdozioneDto> {
     @Autowired
     private CentroAdozioneMapper mapper;
 
-    // --- METODI CRUD RICHIESTI DALL'INTERFACCIA ---
-
     @Override
     @Transactional
     public CentroAdozioneDto insert(CentroAdozioneDto dto) {
@@ -55,7 +53,6 @@ public class CentroAdozioneService implements ServiceDTO<CentroAdozioneDto> {
         return listaTuttiICentri();
     }
 
-    // --- ALTRI METODI ESISTENTI ---
 
     @Transactional(readOnly = true)
     public List<CentroAdozioneDto> listaTuttiICentri() {
@@ -84,10 +81,6 @@ public class CentroAdozioneService implements ServiceDTO<CentroAdozioneDto> {
         return list.isEmpty() ? null : mapper.toDTO(list.get(0));
     }
 
-    /**
-     * IMPLEMENTAZIONE ELIMINA:
-     * Richiamata sia dal metodo delete() dell'interfaccia che dal Controller.
-     */
     @Transactional
     public void elimina(Long id) {
         if (id != null) {
@@ -96,13 +89,10 @@ public class CentroAdozioneService implements ServiceDTO<CentroAdozioneDto> {
     }
 
     public CentroAdozioneDto salvaNuovo(CentroAdozioneDto dto) {
-        // 1. Converti DTO in Entity
         CentroAdozione entity = mapper.toEntity(dto);
 
-        // 2. Salva sul DB tramite Repository
         CentroAdozione salvato = repository.save(entity);
 
-        // 3. Riconverti in DTO e restituisci
         return mapper.toDTO(salvato);
     }
 }

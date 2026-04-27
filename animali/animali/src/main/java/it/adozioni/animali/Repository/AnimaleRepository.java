@@ -16,27 +16,22 @@ public interface AnimaleRepository extends JpaRepository<Animale,Long> {
     List<Animale>findBySpecie(String specie);
     List<Animale> findByAdottatoFalse();
 
-    // Se usi i filtri (Specie e Genere), dobbiamo aggiungere "AndAdottatoFalse"
     List<Animale> findBySpecieAndGenereAndAdottatoFalse(String specie, String genere);
 
-    // Filtro solo per specie
     List<Animale> findBySpecieAndAdottatoFalse(String specie);
 
-    // Filtro solo per genere
     List<Animale> findByGenereAndAdottatoFalse(String genere);
     List<Animale>findByRazzaAndSpecie(String razza, String specie);
-    // 1. Trova tutti gli animali di un centro specifico che non sono ancora stati adottati
+
     @Query("SELECT a FROM Animale a WHERE a.centroAdozione.id = :centroId AND a.adottato = false")
     List<Animale> findDisponibiliPerCentro(@Param("centroId") Long centroId);
 
-    // 2. Conta quanti animali di una certa specie sono presenti in un determinato centro
    @Query("SELECT COUNT(a) FROM Animale a WHERE a.specie = :specie AND a.centroAdozione.id = :centroId")
    long countPerSpecieEIdCentro(@Param("specie") String specie, @Param("centroId") Long centroId);
-    // 1. Recupera gli ultimi 5 animali inseriti nel sistema (basato sull'ID)
+
     @Query(value = "SELECT * FROM animale ORDER BY id DESC LIMIT 5", nativeQuery = true)
     List<Animale> findLastFiveAdded();
 
-    // 2. Trova animali che hanno effettuato più di un certo numero di visite mediche
     @Query(value = "SELECT a.* FROM animale a " +
             "JOIN visita_medica v ON a.id = v.animale_id " +
             "GROUP BY a.id HAVING COUNT(v.id) >= :minVisite", nativeQuery = true)
@@ -58,4 +53,3 @@ public interface AnimaleRepository extends JpaRepository<Animale,Long> {
                                @Param("genere") String genere,
                                @Param("centroId") Long centroId);
 }
-//
