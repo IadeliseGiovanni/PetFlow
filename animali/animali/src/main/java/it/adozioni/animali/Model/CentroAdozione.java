@@ -18,7 +18,7 @@ public class CentroAdozione {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     private String nomeCentro;
 
@@ -34,6 +34,7 @@ public class CentroAdozione {
     private List<Animale> animaliOspitati;
 
     @OneToMany(mappedBy = "centroAdozione", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Volontario> volontari;
 
     private Double latitudine;

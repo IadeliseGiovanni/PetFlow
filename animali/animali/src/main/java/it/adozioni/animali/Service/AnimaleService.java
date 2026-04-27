@@ -22,7 +22,7 @@ public class AnimaleService extends AbstractService<Animale, AnimaleDto> {
         this.animaleMapper = animaleMapper;
     }
 
-    public Animale findByIdEntity(Integer id) {
+    public Animale findByIdEntity(Long id) {
         if (id == null) return null;
         return animaleRepository.findById(id).orElse(null);
     }

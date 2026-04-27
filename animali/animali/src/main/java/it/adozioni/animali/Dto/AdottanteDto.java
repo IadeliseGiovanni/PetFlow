@@ -17,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 public class AdottanteDto {
 
-    private Integer id;
+    private Long id;
     private String nome;
     private String cognome;
     private String email;

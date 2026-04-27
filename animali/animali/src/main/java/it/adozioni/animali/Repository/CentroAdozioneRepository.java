@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 
-public interface CentroAdozioneRepository extends JpaRepository<CentroAdozione, Integer> {
+public interface CentroAdozioneRepository extends JpaRepository<CentroAdozione, Long> {
 
     // 1 - Cerca per nome del centro
     List<CentroAdozione> findByNomeCentro(String nomeCentro);

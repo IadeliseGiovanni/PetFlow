@@ -37,7 +37,7 @@ public class VolontarioController extends AbstractController<VolontarioDto> {
     }
 
     @GetMapping("/read")
-    public VolontarioDto read(@RequestParam("id") Integer id) {
+    public VolontarioDto read(@RequestParam("id") Long id) {
         return service.read(id);
     }
 
@@ -47,7 +47,7 @@ public class VolontarioController extends AbstractController<VolontarioDto> {
     }
 
     @DeleteMapping("/delete")
-    public void delete(@RequestParam("id") Integer id) {
+    public void delete(@RequestParam("id") Long id) {
         service.delete(id);
     }
 

@@ -23,7 +23,7 @@ public class Volontario implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     private String nome;
     private String cognome;
@@ -42,9 +42,11 @@ public class Volontario implements UserDetails {
     @Column(nullable = false)
     private String password;
 
+    @Column(name = "ruolo")
     private String ruolo;
 //
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if (this.ruolo == null || this.ruolo.isEmpty()) {
             return List.of();

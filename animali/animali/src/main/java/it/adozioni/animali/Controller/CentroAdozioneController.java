@@ -30,7 +30,7 @@ public class CentroAdozioneController extends AbstractController<CentroAdozioneD
     }
 
     @DeleteMapping("/delete")
-    public void delete(@RequestParam("id") Integer id) {
+    public void delete(@RequestParam("id") Long id) {
         centroService.delete(id);
     }
 

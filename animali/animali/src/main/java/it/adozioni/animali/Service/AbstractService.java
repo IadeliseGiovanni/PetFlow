@@ -10,10 +10,10 @@ import java.util.List;
 public abstract class AbstractService<ENTITY,DTO> implements ServiceDTO<DTO> {
 //metodi CRUD Generalizzati
 
-    protected JpaRepository<ENTITY,Integer> repository;
+    protected JpaRepository<ENTITY,Long> repository;
     protected Converter<ENTITY,DTO> converter;
 
-    protected AbstractService(JpaRepository<ENTITY, Integer> repository,
+    protected AbstractService(JpaRepository<ENTITY, Long> repository,
                               Converter<ENTITY, DTO> converter) {
         this.repository = repository;
         this.converter = converter;
@@ -21,7 +21,8 @@ public abstract class AbstractService<ENTITY,DTO> implements ServiceDTO<DTO> {
 
     @Override
     public DTO insert(DTO dto) {
-        return converter.toDTO(repository.save(converter.toEntity(dto)));
+        ENTITY entity = converter.toEntity(dto);
+        return converter.toDTO(repository.save(entity));
     }
 
     @Override
@@ -30,7 +31,7 @@ public abstract class AbstractService<ENTITY,DTO> implements ServiceDTO<DTO> {
     }
 
     @Override
-    public DTO read(Integer id) {
+    public DTO read(Long id) {
         return converter.toDTO(repository.findById(id).get());
     }
 
@@ -40,7 +41,7 @@ public abstract class AbstractService<ENTITY,DTO> implements ServiceDTO<DTO> {
     }
 
     @Override
-    public void delete(Integer id) {
+    public void delete(Long id) {
         repository.deleteById(id);
     }
 

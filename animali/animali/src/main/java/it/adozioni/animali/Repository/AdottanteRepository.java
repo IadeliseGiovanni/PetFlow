@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface AdottanteRepository extends JpaRepository<Adottante, Integer> {
+public interface AdottanteRepository extends JpaRepository<Adottante, Long> {
 
     // Utilizzato dal Service per il caricamento dell'utente durante il login
     Optional<Adottante> findByEmail(String email);

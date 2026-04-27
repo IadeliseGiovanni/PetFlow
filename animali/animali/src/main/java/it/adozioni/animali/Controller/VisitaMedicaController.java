@@ -58,7 +58,7 @@ public class VisitaMedicaController extends AbstractController<VisitaMedicaDto> 
     }
 
     @DeleteMapping("/delete")
-    public void delete(@RequestParam("id") Integer id) {
+    public void delete(@RequestParam("id") Long id) {
         service.delete(id);
     }
 

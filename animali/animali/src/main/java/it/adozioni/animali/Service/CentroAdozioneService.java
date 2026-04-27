@@ -33,7 +33,7 @@ public class CentroAdozioneService implements ServiceDTO<CentroAdozioneDto> {
 
     @Override
     @Transactional(readOnly = true)
-    public CentroAdozioneDto read(Integer id) {
+    public CentroAdozioneDto read(Long id) {
         return repository.findById(id).map(mapper::toDTO).orElse(null);
     }
 
@@ -45,7 +45,7 @@ public class CentroAdozioneService implements ServiceDTO<CentroAdozioneDto> {
 
     @Override
     @Transactional
-    public void delete(Integer id) {
+    public void delete(Long id) {
         elimina(id);
     }
 
@@ -89,7 +89,7 @@ public class CentroAdozioneService implements ServiceDTO<CentroAdozioneDto> {
      * Richiamata sia dal metodo delete() dell'interfaccia che dal Controller.
      */
     @Transactional
-    public void elimina(Integer id) {
+    public void elimina(Long id) {
         if (id != null) {
             repository.deleteById(id);
         }

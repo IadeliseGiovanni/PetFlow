@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-public interface VisitaMedicaRepository extends JpaRepository<VisitaMedica, Integer> {
+public interface VisitaMedicaRepository extends JpaRepository<VisitaMedica, Long> {
 
     List<VisitaMedica> findByData(LocalDateTime data);
 

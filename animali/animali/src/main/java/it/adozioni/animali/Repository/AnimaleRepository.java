@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface AnimaleRepository extends JpaRepository<Animale,Integer> {
+public interface AnimaleRepository extends JpaRepository<Animale,Long> {
     List<Animale> findByNome(String nome);
     List<Animale>findByRazza(String razza);
     List<Animale>findByGenere(String genere);
@@ -27,11 +27,11 @@ public interface AnimaleRepository extends JpaRepository<Animale,Integer> {
     List<Animale>findByRazzaAndSpecie(String razza, String specie);
     // 1. Trova tutti gli animali di un centro specifico che non sono ancora stati adottati
     @Query("SELECT a FROM Animale a WHERE a.centroAdozione.id = :centroId AND a.adottato = false")
-    List<Animale> findDisponibiliPerCentro(@Param("centroId") Integer centroId);
+    List<Animale> findDisponibiliPerCentro(@Param("centroId") Long centroId);
 
     // 2. Conta quanti animali di una certa specie sono presenti in un determinato centro
    @Query("SELECT COUNT(a) FROM Animale a WHERE a.specie = :specie AND a.centroAdozione.id = :centroId")
-   long countPerSpecieEIdCentro(@Param("specie") String specie, @Param("centroId") Integer centroId);
+   long countPerSpecieEIdCentro(@Param("specie") String specie, @Param("centroId") Long centroId);
     // 1. Recupera gli ultimi 5 animali inseriti nel sistema (basato sull'ID)
     @Query(value = "SELECT * FROM animale ORDER BY id DESC LIMIT 5", nativeQuery = true)
     List<Animale> findLastFiveAdded();

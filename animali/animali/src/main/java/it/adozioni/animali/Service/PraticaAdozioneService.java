@@ -35,7 +35,7 @@ public class PraticaAdozioneService {
     private DocumentoService documentoService;
 
     @Transactional
-    public PraticaAdozioneDto avviaPratica(Adottante utente, Integer animaleId) {
+    public PraticaAdozioneDto avviaPratica(Adottante utente, Long animaleId) {
 
         // 1. Recupero l'animale e verifico che esista
         Animale animale = animaleRepository.findById(animaleId)
@@ -87,7 +87,7 @@ public class PraticaAdozioneService {
                 .collect(Collectors.toList());
     }
 
-    public List<PraticaAdozioneDto> getPraticheByUtente(Integer adottanteId) {
+    public List<PraticaAdozioneDto> getPraticheByUtente(Long adottanteId) {
         return praticaRepository.findByAdottanteId(adottanteId)
                 .stream()
                 .map(praticaMapper::toDTO)
@@ -95,7 +95,7 @@ public class PraticaAdozioneService {
     }
 
     @Transactional
-    public PraticaAdozioneDto aggiornaStatoPratica(Integer praticaId, StatoPratica nuovoStato, String note) {
+    public PraticaAdozioneDto aggiornaStatoPratica(Long praticaId, StatoPratica nuovoStato, String note) {
         PraticaAdozione pratica = praticaRepository.findById(praticaId)
                 .orElseThrow(() -> new RuntimeException("Pratica non trovata"));
 

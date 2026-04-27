@@ -107,7 +107,7 @@ public class AnimaleController extends AbstractController<AnimaleDto> {
     }
 
     @DeleteMapping("/delete")
-    public void delete(@RequestParam("id") Integer id) {
+    public void delete(@RequestParam("id") Long id) {
         animaleService.delete(id);
     }
 

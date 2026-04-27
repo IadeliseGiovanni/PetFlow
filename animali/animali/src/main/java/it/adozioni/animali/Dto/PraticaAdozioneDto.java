@@ -6,10 +6,10 @@ import java.time.LocalDateTime;
 
 @Data
 public class PraticaAdozioneDto {
-    private Integer id;
-    private Integer adottanteId;
+    private Long id;
+    private Long adottanteId;
     private String adottanteNominativo; // Nome + Cognome uniti
-    private Integer animaleId;
+    private Long animaleId;
     private String animaleNome;
     private StatoPratica stato;
     private LocalDateTime dataApertura;

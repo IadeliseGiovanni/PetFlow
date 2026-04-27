@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AnimaleDto {
-    private Integer id;
+    private Long id;
     private String nome;
     private String specie;
     private String razza;

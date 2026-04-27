@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface VolontarioRepository extends JpaRepository<Volontario, Integer> {
+public interface VolontarioRepository extends JpaRepository<Volontario, Long> {
 
     // 🔹 1 - Cerca per nome
     List<Volontario> findByNome(String nome);

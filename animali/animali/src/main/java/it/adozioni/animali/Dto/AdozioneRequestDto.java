@@ -15,10 +15,10 @@ import lombok.NoArgsConstructor;
 public class AdozioneRequestDto {
 
     @JsonProperty("idAnimale")
-    private Integer idAnimale;
+    private Long idAnimale;
 
     @JsonProperty("idAdottante")
-    private Integer idAdottante;
+    private Long idAdottante;
 
     @JsonProperty("residenza")
     private String residenza;

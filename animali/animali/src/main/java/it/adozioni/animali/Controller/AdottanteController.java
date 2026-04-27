@@ -43,7 +43,7 @@ public class AdottanteController extends AbstractController<AdottanteDto> {
     @GetMapping("/read")
     @Override
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public AdottanteDto read(@RequestParam("id") Integer id) {
+    public AdottanteDto read(@RequestParam("id") Long id) {
         return adottanteService.read(id);
     }
 
@@ -55,7 +55,7 @@ public class AdottanteController extends AbstractController<AdottanteDto> {
 
     @PatchMapping("/{id}/idoneita")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> cambiaIdoneita(@PathVariable int id, @RequestParam boolean stato) {
+    public ResponseEntity<?> cambiaIdoneita(@PathVariable Long id, @RequestParam boolean stato) {
         adottanteService.aggiornaIdoneita(id, stato);
         return ResponseEntity.ok().build();
     }
@@ -63,7 +63,7 @@ public class AdottanteController extends AbstractController<AdottanteDto> {
     @PatchMapping("/{id}/ruolo")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> cambiaRuolo(
-            @PathVariable int id,
+            @PathVariable Long id,
             @RequestParam("nuovoRuolo") String ruolo // Specifica il nome qui
     ) {
         adottanteService.aggiornaRuolo(id, ruolo);
@@ -71,18 +71,18 @@ public class AdottanteController extends AbstractController<AdottanteDto> {
     }
 
     @DeleteMapping("/delete")
-    public void delete(@RequestParam("id") Integer id) {
+    public void delete(@RequestParam("id") Long id) {
         adottanteService.delete(id);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<AdottanteDto> patch(@PathVariable Integer id, @RequestBody AdottanteDto dto) {
+    public ResponseEntity<AdottanteDto> patch(@PathVariable Long id, @RequestBody AdottanteDto dto) {
         return ResponseEntity.ok(adottanteService.patch(id, dto));
     }
 
     @PostMapping("/{id}/richiedi-idoneita")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public ResponseEntity<?> richiediIdoneita(@PathVariable Integer id) {
+    public ResponseEntity<?> richiediIdoneita(@PathVariable Long id) {
         try {
             adottanteService.avviaPraticaIdoneita(id);
             return ResponseEntity.ok().body("{\"message\": \"Richiesta presa in carico\"}");
@@ -93,7 +93,7 @@ public class AdottanteController extends AbstractController<AdottanteDto> {
 
     @PostMapping("/{id}/richiedi-cambio-email")
     public ResponseEntity<String> richiediCambio(
-            @PathVariable Integer id,
+            @PathVariable Long id,
             @RequestParam String nuovaEmail) {
 
         // Chiamata al service che abbiamo sistemato prima
@@ -111,7 +111,7 @@ public class AdottanteController extends AbstractController<AdottanteDto> {
     @PatchMapping("/{id}/cambia-password")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<?> cambiaPassword(
-            @PathVariable Integer id,
+            @PathVariable Long id,
             @RequestParam String vecchiaPassword,
             @RequestParam String nuovaPassword) {
         try {

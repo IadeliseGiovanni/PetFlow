@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class VolontarioDto {
 
-    private Integer id;
+    private Long id;
     private String nome;
     private String cognome;
     private String cf;
@@ -21,6 +21,7 @@ public class VolontarioDto {
     private String email;
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
+    private String ruolo;
 //
     private CentroAdozione centroAdozione;
 }

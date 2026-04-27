@@ -102,7 +102,7 @@ public class AdottanteService extends AbstractService<Adottante, AdottanteDto> i
     /**
      * FIND BY ID ENTITY: Risolve il rosso nel Controller del PDF
      */
-    public Adottante findByIdEntity(Integer id) {
+    public Adottante findByIdEntity(Long id) {
         if (id == null) return null;
         return adottanteRepository.findById(id).orElse(null);
     }
@@ -124,7 +124,7 @@ public class AdottanteService extends AbstractService<Adottante, AdottanteDto> i
     }
 
     @Transactional
-    public void aggiornaIdoneita(int id, boolean stato) {
+    public void aggiornaIdoneita(Long id, boolean stato) {
         adottanteRepository.findById(id).ifPresent(a -> {
             // 1. Aggiorna il flag booleano
             a.setIsSchedato(stato);
@@ -143,7 +143,7 @@ public class AdottanteService extends AbstractService<Adottante, AdottanteDto> i
     }
 
     @Transactional
-    public void aggiornaRuolo(int id, String nuovoRuolo) {
+    public void aggiornaRuolo(Long id, String nuovoRuolo) {
         adottanteRepository.findById(id).ifPresent(a -> {
             a.setRuolo(nuovoRuolo);
             adottanteRepository.save(a);
@@ -162,7 +162,7 @@ public class AdottanteService extends AbstractService<Adottante, AdottanteDto> i
     }
 
     @Transactional
-    public AdottanteDto patch(Integer id, AdottanteDto dto) {
+    public AdottanteDto patch(Long id, AdottanteDto dto) {
         // 1. Recupero l'entità esistente
         Adottante adottante = adottanteRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Adottante non trovato con ID: " + id));
@@ -181,7 +181,7 @@ public class AdottanteService extends AbstractService<Adottante, AdottanteDto> i
     }
 
     @Transactional
-    public void avviaPraticaIdoneita(Integer adottanteId) {
+    public void avviaPraticaIdoneita(Long adottanteId) {
         Adottante adottante = adottanteRepository.findById(adottanteId)
                 .orElseThrow(() -> new RuntimeException("Adottante non trovato"));
 
@@ -199,7 +199,7 @@ public class AdottanteService extends AbstractService<Adottante, AdottanteDto> i
     }
 
     @Transactional
-    public String richiediCambioEmail(Integer adottanteId, String nuovaEmail) {
+    public String richiediCambioEmail(Long adottanteId, String nuovaEmail) {
         Adottante adottante = adottanteRepository.findById(adottanteId)
                 .orElseThrow(() -> new RuntimeException("Adottante non trovato"));
 
@@ -258,7 +258,7 @@ public class AdottanteService extends AbstractService<Adottante, AdottanteDto> i
     }
 
     @Transactional
-    public void cambiaPassword(Integer adottanteId, String vecchiaPassword, String nuovaPassword) {
+    public void cambiaPassword(Long adottanteId, String vecchiaPassword, String nuovaPassword) {
         Adottante adottante = adottanteRepository.findById(adottanteId)
                 .orElseThrow(() -> new RuntimeException("Adottante non trovato"));
 
@@ -280,7 +280,7 @@ public class AdottanteService extends AbstractService<Adottante, AdottanteDto> i
     // AdottanteService.java
 
     @Transactional // Fondamentale per scrivere fisicamente sul DB
-    public void salvaResetToken(Integer id, String token) {
+    public void salvaResetToken(Long id, String token) {
         Adottante adottante = adottanteRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Utente non trovato"));
 

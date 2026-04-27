@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 public class CentroAdozioneDto {
 
-    private Integer id;
+    private Long id;
 
     private String nomeCentro;
 
@@ -23,7 +23,7 @@ public class CentroAdozioneDto {
 
     private String citta;
 
-    private Integer capacitaMassima;
+    private Long capacitaMassima;
 
     private Boolean isNoProfit;
 

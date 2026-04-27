@@ -21,7 +21,7 @@ public class Adottante implements UserDetails { //implementando dice usa questa 
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     private String nome;
     private String cognome;

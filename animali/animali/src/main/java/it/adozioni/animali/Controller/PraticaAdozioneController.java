@@ -31,7 +31,7 @@ public class PraticaAdozioneController {
      */
     @PostMapping("/avvia/{animaleId}")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    public ResponseEntity<?> avviaPratica(@PathVariable Integer animaleId, Principal principal) {
+    public ResponseEntity<?> avviaPratica(@PathVariable Long animaleId, Principal principal) {
         try {
             // 1. Recupero l'utente loggato partendo dall'email nel token
             Adottante utenteLoggato = adottanteRepository.findByEmail(principal.getName())
@@ -83,7 +83,7 @@ public class PraticaAdozioneController {
     @PatchMapping("/admin/{id}/stato")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> cambiaStatoPratica(
-            @PathVariable Integer id,
+            @PathVariable Long id,
             @RequestParam StatoPratica nuovoStato,
             @RequestBody(required = false) String note) {
         try {
